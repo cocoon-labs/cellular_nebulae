@@ -2,3 +2,5 @@
 */*~
 data/*.mp3
 data/.DS_Store
+output/*.class
+
