@@ -19,7 +19,7 @@ Field field;
 // random crap
 int dir = 1;
 int fileIdx = 1;
-String fname = "/Users/oren/circles/" + (new Date()).toString();
+String fname = "/Users/oren/Documents/Processing/ds_circles/arrangements/" + (new Date()).toString();
 boolean created = new File(fname).mkdir();
 double distFromCenter;
 
@@ -29,68 +29,62 @@ Minim minim;
 AudioPlayer sound;
 
 void setup() {
-  size(displayWidth, displayHeight);
-  background(255);
+    println(created);
+    size(displayWidth, displayHeight);
+    background(255);
   
-  field = new Field(2, 3, 100, displayHeight, displayWidth);
-  minim = new Minim(this);
-  //minim.debugOn();
+    field = new Field(3, 4, 100, displayHeight, displayWidth);
+    minim = new Minim(this);
+    //minim.debugOn();
   
-  sound = minim.loadFile("Deva_Victrix.mp3");
-  bpm = new BPMDetector(sound);
-  bpm.setup();
+    sound = minim.loadFile("Deva_Victrix.mp3");
+    bpm = new BPMDetector(sound);
+    bpm.setup();
 }
 
 void draw() {
-  //r = r + dir;
-  //b = b + dir;
+    //r = r + dir;
+    //b = b + dir;
   
-  //if (r == 256 || r == 0) {
-  //  dir = -dir;
-  //} 
+    //if (r == 256 || r == 0) {
+    //  dir = -dir;
+    //} 
 
-  /*if (keyPressed && !justPressed) {
-    justPressed = true;
-    if (key == 'n') {      
-      background(255);
-      newCircles();      
-    } else if (key == 'p') {
-      println("print the circles!!");
+    if (keyPressed && !justPressed) {
+	justPressed = true;
+	if ('a' <= key && key < 'a' + field.nPanels) {
+	    field.placeCircles(key - 'a');
+	} else if (key == '\n') {
       
-      // save the frame
-      save(fname + "/circle_arrangement_" + fileIdx + ".png");
+	    // save the frame
+	    save(fname + "/arrangement_" + fileIdx + ".png");
       
-      // dump the circles
-      dumpCircles();
-      fileIdx += 1;
+	    // dump the circles
+	    dumpCircles();
+	    fileIdx += 1;
+	}
+    } else if (!keyPressed) {
+	justPressed = false;
     }
-  } else if (!keyPressed) {
-    justPressed = false;
-  }*/
   
-  if (bpm.isBeat()) {
-    field.randomize();
-    field.update();
-  }
-  field.draw();
-  //field.send();  
+    if (bpm.isBeat()) {
+	field.randomize();
+	field.update();
+    }
+    field.draw();
+    //field.send();  
 }
 
-/*void dumpCircles() {
+void dumpCircles() {
   try {
-    PrintWriter writer = new PrintWriter(fname + "/circle_data_" + fileIdx + ".txt", "UTF-8");
-    for (int i = 0; i < nCircles; i++) {
-      float x = circles[i][0] / (dim*1.0);
-      float y = circles[i][1] / (dim * 1.0);
-      diam = circles[i][2] / dim;
-      writer.println("Center: (" + x  + ", " + y + ")   Radius: " + diam + "   Height: " + circles[i][3]); 
-    }
-    writer.close();
+      PrintWriter writer = new PrintWriter(fname + "/circle_data_" + fileIdx + ".txt", "UTF-8");
+      field.dumpCircles(writer);
+      writer.close();
   } catch(Exception e) {
   }
-}*/
+}
 
 void stop() {
-  sound.close();
-  minim.stop();
+    sound.close();
+    minim.stop();
 }
