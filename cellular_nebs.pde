@@ -126,7 +126,15 @@ public class Field {
 		ellipse(circles[i][0], circles[i][1], circles[i][2], circles[i][2]);
 	    }
 	}
-    
+
+	// protected void send(OPC opc, int idxOffset) {
+	//     int color;
+	//     for (int i = 0; i < nCircles; i++) {
+	// 	color = circles[i][0] << 16 || circles[i][1] << 8 || circles[i][2];
+	// 	opc.setPixel(idxOffset + i, color);
+	//     }
+	// }
+	    
 	private int randInt(int min, int max) {
 	    int randomNum = rand.nextInt((max - min) + 1) + min;
 	    return randomNum;
@@ -167,8 +175,9 @@ public class Field {
     };
     int nPanels, chance;
     Random rand = new Random();
+    OPC opc;
 
-    Field(int yDim, int xDim, int chanceFactor, int displayHeight, int displayWidth) {
+    Field(int yDim, int xDim, int chanceFactor, int displayHeight, int displayWidth, OPC opc) {
 	int xOff = 0, yOff = 0;
 	int squareSide = Math.min(displayWidth / xDim, displayHeight / yDim);
     
@@ -187,6 +196,9 @@ public class Field {
 	}
 	placeCircles();
 	chance = chanceFactor;
+
+	this.opc = opc;
+	opc.setPixelCount(nPanels * panels[0].nCircles);
     }
   
     public void update() {
@@ -226,6 +238,13 @@ public class Field {
 	for (int i = 0; i < nPanels; i++) {
 	    panels[i].draw();
 	}
+    }
+
+    public void send() {
+	for (int i = 0; i < nPanels; i++) {
+	    panels[i].send(opc, i * 9);
+	}
+	opc.writePixels();
     }
 
     public void placeCircles(int index) {

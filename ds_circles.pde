@@ -27,13 +27,15 @@ double distFromCenter;
 BPMDetector bpm;
 Minim minim;
 AudioPlayer sound;
+OPC opc;
 
 void setup() {
     println(created);
     size(displayWidth, displayHeight);
     background(255);
+    opc = new OPC(this, "127.0.0.1", 7890);
   
-    field = new Field(3, 4, 100, displayHeight, displayWidth);
+    field = new Field(3, 4, 100, displayHeight, displayWidth, opc);
     minim = new Minim(this);
     //minim.debugOn();
   
@@ -71,8 +73,8 @@ void draw() {
 	field.randomize();
 	field.update();
     }
-    field.draw();
-    //field.send();  
+    // field.draw();
+    field.send();  
 }
 
 void dumpCircles() {
