@@ -9,19 +9,29 @@ class ColorWheel {
    { {128, 0, 255}, {0, 0, 0}, {255, 128, 0} } // orpal
   }; 
   
-  public int[] getColor(int scheme, int position) {
+  public int[] getColor(int scheme, int position, int brightness) {
     int[][] colors = schemes[scheme];
     int nColors = colors.length;
     int dist = 255 / nColors;
+    int[] c = new int[3];
     
     for (int i = 0; i < nColors; i++) {
       if (position < (i + 1) * dist) {
-        return genColor(i, colors, position, dist);
+        c = genColor(i, colors, position, dist);
+        return applyBrightness(c, brightness);
       }
     }
       
-    return genColor(nColors - 1, colors, position, dist);
-    
+    c = genColor(nColors - 1, colors, position, dist);
+    return applyBrightness(c, brightness);
+  }
+  
+  public int[] applyBrightness(int[] c, int brightness) {
+    int[] newC = new int[3];
+    newC[0] = int(map(brightness, 0, 255, 0, c[0]));
+    newC[1] = int(map(brightness, 0, 255, 0, c[1]));
+    newC[2] = int(map(brightness, 0, 255, 0, c[2]));
+    return newC;
   }
   
   public int nSchemes() {
@@ -42,4 +52,3 @@ class ColorWheel {
     return result;
   }
 } 
-

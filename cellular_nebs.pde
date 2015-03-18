@@ -23,7 +23,8 @@ public class Field {
 	    }
       
 	}
-    
+        
+        // brightness between 0 and 255
 	public void updateAll(int[] c) {
 	    updateBig(c);
 	    updateMid(c);
@@ -31,7 +32,7 @@ public class Field {
 	}
     
 	public void updateBig(int[] c) {
-	    colors[0] = c;
+            colors[0] = c;
 	}
  
 	public void updateMid(int[] c) {
@@ -159,7 +160,7 @@ public class Field {
     int wheelPos = 0;
     int schemeNo = 0;
     int nModes = 1;
-    int mode = 0;
+    int mode = 1;
     int beatInterval = 500;
     int delayMultiplier = 5;
     float[] multipliers = {
@@ -205,6 +206,8 @@ public class Field {
 	switch(mode) {
 	case 0: gradientBySize();
 	    break;
+        case 1: fftBySize();
+            break;
 	default: println("FUCK A GOAT WITH THAT!!"); 
 	}
     }
@@ -214,9 +217,9 @@ public class Field {
 	    schemeNo = rand.nextInt(wheel.nSchemes());
 	}
     
-	if (rand.nextInt(chance) == 0) {
+	/*if (rand.nextInt(chance) == 0) {
 	    mode = rand.nextInt(nModes);
-	}
+	}*/
     
 	if (rand.nextInt(chance) == 0) {
 	    delayMultiplier = rand.nextInt(9);
@@ -226,12 +229,28 @@ public class Field {
     private void gradientBySize() {
 	int sizeOffset = bpm.getBand(0);
 	int panelOffset = bpm.getBand(2);
+        int brightness = 255;
 	for (int i = 0; i < panels.length; i++) {
-	    panels[i].updateBig(wheel.getColor(schemeNo, wheelPos % 255));
-	    panels[i].updateMid(wheel.getColor(schemeNo, (wheelPos + sizeOffset) % 255));
-	    panels[i].updateSmall(wheel.getColor(schemeNo, (wheelPos + sizeOffset * 2) % 255));
+	    panels[i].updateBig(wheel.getColor(schemeNo, wheelPos % 255, brightness));
+	    panels[i].updateMid(wheel.getColor(schemeNo, (wheelPos + sizeOffset) % 255, brightness));
+	    panels[i].updateSmall(wheel.getColor(schemeNo, (wheelPos + sizeOffset * 2) % 255, brightness));
 	    wheelPos = (wheelPos + panelOffset) % 255;
 	}      
+    }
+    
+    private void fftBySize() {
+        int sizeOffset = 85;
+        int panelOffset = bpm.getBand(2);
+        // Amplitude values between 0 and 255
+        int lowAmp = constrain((bpm.getBand(0) + bpm.getBand(1) + bpm.getBand(2) + bpm.getBand(3)), 0, 255);
+        int midAmp = constrain((bpm.getBand(4) + bpm.getBand(5) + bpm.getBand(6)) * 4, 0, 255);
+        int highAmp = constrain((bpm.getBand(7) + bpm.getBand(8) + bpm.getBand(9)) * 4, 0, 255);
+        for (int i = 0; i < panels.length; i++) {
+            panels[i].updateBig(wheel.getColor(schemeNo, wheelPos % 255, lowAmp));
+            panels[i].updateMid(wheel.getColor(schemeNo, (wheelPos + sizeOffset) % 255, midAmp));
+            panels[i].updateSmall(wheel.getColor(schemeNo, (wheelPos + sizeOffset * 2) % 255, highAmp));
+            wheelPos = (wheelPos + panelOffset) % 255;
+        }
     }
   
     public void draw() {
@@ -240,12 +259,12 @@ public class Field {
 	}
     }
 
-    public void send() {
+    /*public void send() {
 	for (int i = 0; i < nPanels; i++) {
 	    panels[i].send(opc, i * 9);
 	}
 	opc.writePixels();
-    }
+    }*/
 
     public void placeCircles(int index) {
 	panels[index].placeCircles();

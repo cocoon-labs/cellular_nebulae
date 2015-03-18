@@ -32,14 +32,16 @@ OPC opc;
 void setup() {
     println(created);
     size(displayWidth, displayHeight);
+    //size(400, 400);
     background(255);
     opc = new OPC(this, "127.0.0.1", 7890);
   
     field = new Field(3, 4, 100, displayHeight, displayWidth, opc);
+    //field = new Field(1, 1, 100, 400, 400, opc);
     minim = new Minim(this);
     //minim.debugOn();
   
-    sound = minim.loadFile("Deva_Victrix.mp3");
+    sound = minim.loadFile("cywf.mp3");
     bpm = new BPMDetector(sound);
     bpm.setup();
 }
@@ -69,12 +71,15 @@ void draw() {
 	justPressed = false;
     }
   
-    if (bpm.isBeat()) {
+    /*if (bpm.isBeat()) {
 	field.randomize();
 	field.update();
-    }
-    // field.draw();
-    field.send();  
+    }*/
+    bpm.isBeat();
+    field.randomize();
+    field.update();
+    field.draw();
+    //field.send();  
 }
 
 void dumpCircles() {
