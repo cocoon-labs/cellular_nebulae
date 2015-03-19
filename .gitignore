@@ -3,4 +3,7 @@
 data/*.mp3
 data/.DS_Store
 output/*.class
+output/source/*
+arrangements/*
+.DS_Store
 
