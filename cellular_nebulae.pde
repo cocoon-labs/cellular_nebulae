@@ -44,15 +44,15 @@ void processUserInput() {
   if (keyPressed && !justPressed) {
     justPressed = true;
     if ('a' <= key && key < 'a' + field.nPanels) {
-	    field.placeCircles(key - 'a');
+      field.placeCircles(key - 'a');
     } else if (key == '\n') {
       
-	    // save the frame
-	    save(fname + "/arrangement_" + fileIdx + ".png");
+      // save the frame
+      save(fname + "/arrangement_" + fileIdx + ".png");
       
-	    // dump the circles
-	    serialize();
-	    fileIdx += 1;
+      // dump the circles
+      serialize();
+      fileIdx += 1;
     }
   } else if (!keyPressed) {
     justPressed = false;

@@ -9,10 +9,10 @@ public class GradientBySize extends Mode {
     int panelOffset = bpm.getBand(2);
     int brightness = 255;
     for (int i = 0; i < panels.length; i++) {
-	    panels[i].updateBig(wheel.getColor(schemeNo, wheelPos % 255, brightness));
-	    panels[i].updateMid(wheel.getColor(schemeNo, (wheelPos + sizeOffset) % 255, brightness));
-	    panels[i].updateSmall(wheel.getColor(schemeNo, (wheelPos + sizeOffset * 2) % 255, brightness));
-	    wheelPos = (wheelPos + panelOffset) % 255;
+      panels[i].updateBig(wheel.getColor(schemeNo, wheelPos % 255, brightness));
+      panels[i].updateMid(wheel.getColor(schemeNo, (wheelPos + sizeOffset) % 255, brightness));
+      panels[i].updateSmall(wheel.getColor(schemeNo, (wheelPos + sizeOffset * 2) % 255, brightness));
+      wheelPos = (wheelPos + panelOffset) % 255;
     }      
   }
 

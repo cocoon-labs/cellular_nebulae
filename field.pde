@@ -30,17 +30,17 @@ public class Field {
     int squareSide = Math.min(displayWidth / xDim, displayHeight / yDim);
     
     if (squareSide == displayWidth / xDim) {
-	    yOff = (displayHeight - (squareSide * yDim)) / 2;
+      yOff = (displayHeight - (squareSide * yDim)) / 2;
     } else {
-	    xOff = (displayWidth - (squareSide * xDim)) / 2;
+      xOff = (displayWidth - (squareSide * xDim)) / 2;
     }
           
     this.nPanels = xDim * yDim;
     panels = new Panel[nPanels];
     for (int i = 0; i < nPanels; i++) {
-	    int tmpX = xOff + (i % xDim) * squareSide;
-	    int tmpY = yOff + (i / xDim) * squareSide; 
-	    panels[i] = new Panel(squareSide, tmpX, tmpY);
+      int tmpX = xOff + (i % xDim) * squareSide;
+      int tmpY = yOff + (i / xDim) * squareSide; 
+      panels[i] = new Panel(squareSide, tmpX, tmpY);
     }
     placeCircles();
     chance = chanceFactor;
@@ -60,21 +60,21 @@ public class Field {
   
   public void randomize() {
     if (rand.nextInt(chance) == 0) {
-	    schemeNo = rand.nextInt(wheel.nSchemes());
+      schemeNo = rand.nextInt(wheel.nSchemes());
     }
     
     /*if (rand.nextInt(chance) == 0) {
-	    mode = rand.nextInt(nModes);
+      mode = rand.nextInt(nModes);
       }*/
     
     if (rand.nextInt(chance) == 0) {
-	    delayMultiplier = rand.nextInt(9);
+      delayMultiplier = rand.nextInt(9);
     }
   }
     
   public void draw() {
     for (int i = 0; i < nPanels; i++) {
-	    panels[i].draw();
+      panels[i].draw();
     }
   }
 
@@ -84,14 +84,14 @@ public class Field {
 
   public void placeCircles() {
     for (int i = 0; i < nPanels; i++) {
-	    panels[i].placeCircles();
+      panels[i].placeCircles();
     }
   }
 
   public void serialize(PrintWriter writer) {
     println("print the circles!!");
     for (int i = 0; i < nPanels; i++) {
-	    panels[i].dumpCircles(writer, i);
+      panels[i].dumpCircles(writer, i);
     }
   }
 }
