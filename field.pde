@@ -37,7 +37,7 @@ public class Field {
     for (int i = 0; i < nPanels; i++) {
       int tmpX = xOff + (i % xDim) * squareSide;
       int tmpY = yOff + (i / xDim) * squareSide; 
-      panels[i] = new Panel(squareSide, tmpX, tmpY);
+      panels[i] = new Panel(squareSide, tmpX, tmpY, opc);
     }
     placeCircles();
     chance = chanceFactor;

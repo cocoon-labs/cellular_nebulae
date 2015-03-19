@@ -31,7 +31,7 @@ void setup() {
   
   minim = new Minim(this);
   //minim.debugOn();
-  sound = minim.loadFile("getbusy.mp3");
+  sound = minim.loadFile("cywf.mp3");
   bpm = new BPMDetector(sound);
   bpm.setup();
   
