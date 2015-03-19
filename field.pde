@@ -40,7 +40,7 @@ public class Field {
     for (int i = 0; i < nPanels; i++) {
 	    int tmpX = xOff + (i % xDim) * squareSide;
 	    int tmpY = yOff + (i / xDim) * squareSide; 
-	    panels[i] = new Panel(squareSide, tmpX, tmpY);
+	    panels[i] = new Panel(squareSide, tmpX, tmpY, opc);
     }
     placeCircles();
     chance = chanceFactor;
@@ -75,6 +75,12 @@ public class Field {
   public void draw() {
     for (int i = 0; i < nPanels; i++) {
 	    panels[i].draw();
+    }
+  }
+
+  public void send() {
+    for (int i = 0; i < nPanels; i++) {
+      panels[i].send((i % 4) * panels[0].nCircles);
     }
   }
 
