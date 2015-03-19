@@ -16,12 +16,16 @@ boolean created = new File(fname).mkdir();
 BPMDetector bpm;
 Minim minim;
 AudioPlayer sound;
+AudioInput in;
 OPC opc;
+
+int bufferSize = 1024;
+float sampleRate = 44100;
 
 void setup() {
   // println(created);
-  // size(displayWidth, displayHeight);
-  // background(255);
+  size(displayWidth, displayHeight);
+  background(255);
   opc = new OPC(this, "127.0.0.1", 7890);
   
   field = new Field(3, 4, 100, displayHeight, displayWidth, opc);
@@ -31,14 +35,19 @@ void setup() {
   sound = minim.loadFile("cywf.mp3");
   bpm = new BPMDetector(sound);
   bpm.setup();
+
+  // in = minim.getLineIn(Minim.MONO, bufferSize, sampleRate);
+  // bpm = new BPMDetector(in);
+  // bpm.setup();
+  
 }
 
 void draw() {
   // processUserInput();
   field.randomize();
   field.update();
-  // field.draw();
-  field.send();
+  field.draw();
+  // field.send();
 }
 
 void processUserInput() {
