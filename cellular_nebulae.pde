@@ -16,14 +16,17 @@ boolean created = new File(fname).mkdir();
 BPMDetector bpm;
 Minim minim;
 AudioPlayer sound;
+AudioInput in;
 OPC opc;
 
 Random rand = new Random();
+int bufferSize = 1024;
+float sampleRate = 44100;
 
 void setup() {
   // println(created);
-  // size(displayWidth, displayHeight);
-  // background(255);
+  size(displayWidth, displayHeight);
+  background(255);
   opc = new OPC(this, "127.0.0.1", 7890);
   
   minim = new Minim(this);
@@ -33,14 +36,19 @@ void setup() {
   bpm.setup();
   
   field = new Field(2, 6, 100, displayHeight, displayWidth, opc);
+
+  // in = minim.getLineIn(Minim.MONO, bufferSize, sampleRate);
+  // bpm = new BPMDetector(in);
+  // bpm.setup();
+  
 }
 
 void draw() {
   // processUserInput();
   field.randomize();
   field.update();
-  // field.draw();
-  field.send();
+  field.draw();
+  // field.send();
 }
 
 void processUserInput() {

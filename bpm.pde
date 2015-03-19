@@ -7,6 +7,8 @@ import processing.serial.*;
 class BPMDetector {
 
   AudioPlayer in;
+  //  AudioInput in;
+
   FFT fft;
   
   int longTermAverageSamples = 60;    //gets average volume over a period of time
@@ -55,6 +57,10 @@ class BPMDetector {
   BPMDetector(AudioPlayer sound) {
     in = sound;
   }
+
+  // BPMDetector(AudioInput sound) {
+  //   in = sound;
+  // }
   
   //////////////////////////////////
   
@@ -69,8 +75,12 @@ class BPMDetector {
     }
   
     minim = new Minim(this);                                      //Sets up minim
+  
+    
     //in = minim.getLineIn(Minim.STEREO, 1024);
     //in = minim.getLineIn(Minim.STEREO, 2048);                     //Gets values from mic (and soundcard?)
+
+    // remove this if you wanna line in
     in.loop();
     fft = new FFT(in.bufferSize(), in.sampleRate());              //Sets up the FFT
     fft.logAverages(30, 5);                                       //Creates a 5 band/oct FFT starting at 40Hz
@@ -203,7 +213,6 @@ class BPMDetector {
     for (int i = 0; i < beatBands; i += 1) count[i] += 1;
     beatCounter += 1;
     beatPosition += 1;
-    
     return result;
   }
 
