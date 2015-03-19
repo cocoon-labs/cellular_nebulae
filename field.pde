@@ -69,6 +69,12 @@ public class Field {
     }
   }
 
+  public void send() {
+    for (int i = 0; i < nPanels; i++) {
+      panels[i].send((i % 4) * panels[0].nCircles);
+    }
+  }
+
   public void placeCircles(int index) {
     panels[index].placeCircles();
   }

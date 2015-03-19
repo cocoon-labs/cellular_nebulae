@@ -7,8 +7,9 @@ class Panel {
   int nCircles = 9;
   int dim, tallBound, midBound;
   int squareSide, xOff, yOff;
+  OPC opc;
     
-  Panel(int squareSide, int xOff, int yOff) {
+  Panel(int squareSide, int xOff, int yOff, OPC opc) {
     this.dim = squareSide / 18;
     this.tallBound = 4 * dim;
     this.midBound = 7 * dim;
@@ -17,10 +18,11 @@ class Panel {
     this.yOff = yOff;
       
     for (int i = 0; i < nCircles; i++) {
-      for (int j = 0; j < 3; j++) {
+	    for (int j = 0; j < 3; j++) {
         colors[i][j] = 0;
-      }
+	    }
     }
+    this.opc = opc;
   }
         
   // brightness between 0 and 255
@@ -36,13 +38,13 @@ class Panel {
  
   public void updateMid(int[] c) {
     for (int i = 1; i < 4; i++) {
-      colors[i] = c;
+	    colors[i] = c;
     }
   }
     
   public void updateSmall(int[] c) {
     for (int i = 4; i < 9; i++) {
-      colors[i] = c;
+	    colors[i] = c;
     }
   }
   
@@ -65,6 +67,7 @@ class Panel {
         placeMin = diam / 2;
         placeMax = 18 * dim - diam / 2;
       }
+
       while(true) {
         x = randInt(placeMin, placeMax) + xOff;
         y = randInt(placeMin, placeMax) + yOff;
@@ -104,14 +107,14 @@ class Panel {
         prefix = "\"Small";
       }
 
-      float x = (circles[i][0] - xOff) / (dim * 1.0);
-      float y = (circles[i][1] - yOff) / (dim * 1.0);
-      diam = circles[i][2] / dim;
-      height = circles[i][3];
-      writer.println(prefix + counter + " X\"= " + x);
-      writer.println(prefix + counter + " Y\"= " + y);
-      writer.println(prefix + counter + " D\"= " + diam);
-      writer.println(prefix + counter + " H\"= " + height);
+	    float x = (circles[i][0] - xOff) / (dim * 1.0);
+	    float y = (circles[i][1] - yOff) / (dim * 1.0);
+	    diam = circles[i][2] / dim;
+	    height = circles[i][3];
+	    writer.println(prefix + counter + " X\"= " + x);
+	    writer.println(prefix + counter + " Y\"= " + y);
+	    writer.println(prefix + counter + " D\"= " + diam);
+	    writer.println(prefix + counter + " H\"= " + height);
     }
     writer.println();
   }
@@ -151,22 +154,23 @@ class Panel {
     rect(xOff, yOff, squareSide, squareSide);
 
     for (int i = 0; i < nCircles; i++) {
-      //println(i);
+	    //println(i);
         
-      noStroke();
-      fill(colors[i][0], colors[i][1], colors[i][2]);
-      ellipse(circles[i][0], circles[i][1], circles[i][2], circles[i][2]);
+	    noStroke();
+	    fill(colors[i][0], colors[i][1], colors[i][2]);
+	    ellipse(circles[i][0], circles[i][1], circles[i][2], circles[i][2]);
     }
   }
 
-  // protected void send(OPC opc, int idxOffset) {
-  //     int color;
-  //     for (int i = 0; i < nCircles; i++) {
-  //  color = circles[i][0] << 16 || circles[i][1] << 8 || circles[i][2];
-  //  opc.setPixel(idxOffset + i, color);
-  //     }
-  // }
-      
+  public void send(int idxOffset) {
+    println("sending");
+    // int color;
+    // for (int i = 0; i < nCircles; i++) {
+    //   color = circles[i][0] << 16 || circles[i][1] << 8 || circles[i][2];
+    //   opc.setPixel(idxOffset + i, color);
+    // }
+  }
+
   private int randInt(int min, int max) {
     int randomNum = rand.nextInt((max - min) + 1) + min;
     return randomNum;

@@ -21,9 +21,9 @@ OPC opc;
 Random rand = new Random();
 
 void setup() {
-  println(created);
-  size(displayWidth, displayHeight);
-  background(255);
+  // println(created);
+  // size(displayWidth, displayHeight);
+  // background(255);
   opc = new OPC(this, "127.0.0.1", 7890);
   
   minim = new Minim(this);
@@ -36,10 +36,11 @@ void setup() {
 }
 
 void draw() {
-  processUserInput();
+  // processUserInput();
   field.randomize();
   field.update();
-  field.draw();
+  // field.draw();
+  field.send();
 }
 
 void processUserInput() {
