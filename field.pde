@@ -2,12 +2,10 @@ public class Field {
  
   Panel[] panels;
   ColorWheel wheel;
-  int wheelPos = 0;
-  int schemeNo = 0;
 
-  Mode[] modes = new Mode[2];
+  Mode[] modes = new Mode[4];
   int nModes = modes.length;
-  int mode = 1;
+  int mode = 3;
   int beatInterval = 500;
   int delayMultiplier = 5;
   float[] multipliers = {
@@ -22,7 +20,6 @@ public class Field {
     4.0
   };
   int nPanels, chance;
-  Random rand = new Random();
   OPC opc;
 
   Field(int yDim, int xDim, int chanceFactor, int displayHeight, int displayWidth, OPC opc) {
@@ -50,26 +47,20 @@ public class Field {
 
     wheel = new ColorWheel();
 
-    modes[0] = new GradientBySize(panels, wheel);
-    modes[1] = new FFTBySize(panels, wheel);
+    modes[0] = new GradientBySize(panels, wheel, 0.9, chance);
+    modes[1] = new FFTBySize(panels, wheel, 0.9, chance);
+    modes[2] = new Popcorn(panels, wheel, 0.9, chance);
+    modes[3] = new FFTByPanel(panels, wheel, 0.9, chance);
   }
   
   public void update() {
-    modes[mode].update(wheelPos, schemeNo);
+    modes[mode].update();
   }
   
   public void randomize() {
-    if (rand.nextInt(chance) == 0) {
-      schemeNo = rand.nextInt(wheel.nSchemes());
-    }
-    
     /*if (rand.nextInt(chance) == 0) {
       mode = rand.nextInt(nModes);
-      }*/
-    
-    if (rand.nextInt(chance) == 0) {
-      delayMultiplier = rand.nextInt(9);
-    }
+    }*/
   }
     
   public void draw() {

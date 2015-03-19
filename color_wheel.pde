@@ -1,4 +1,7 @@
 class ColorWheel {
+  int wheelPos = 0;
+  int schemeNo = 0;
+  
   private int[][][] schemes = {
    { {255, 0, 0}, {177, 67, 226}, {0, 0, 255} }, // red purple blue
    { {218, 107, 44}, {240, 23, 0}, {147, 0, 131} }, // snowskirt
@@ -6,23 +9,25 @@ class ColorWheel {
    { {122, 0, 255}, {0, 0, 255}, {0, 88, 205} }, // cool
    { {0, 0, 0}, {196, 0, 255}, {209, 209, 209} }, // dork
    { {177, 0, 177}, {77, 17, 71}, {247, 77, 7} }, // sevens
-   { {128, 0, 255}, {0, 0, 0}, {255, 128, 0} } // orpal
+   { {128, 0, 255}, {0, 0, 0}, {255, 128, 0} }, // orpal
+   { {255, 0, 0}, {0, 255, 0}, {0, 0, 255} } // rainbow
   }; 
   
-  public int[] getColor(int scheme, int position, int brightness) {
-    int[][] colors = schemes[scheme];
+  public int[] getColor(int offset, int brightness) {
+    int[][] colors = schemes[schemeNo];
     int nColors = colors.length;
     int dist = 255 / nColors;
     int[] c = new int[3];
+    int position = (wheelPos + offset) % 255;
     
     for (int i = 0; i < nColors; i++) {
       if (position < (i + 1) * dist) {
-        c = genColor(i, colors, position, dist);
+        c = genColor(position, i, colors, dist);
         return applyBrightness(c, brightness);
       }
     }
       
-    c = genColor(nColors - 1, colors, position, dist);
+    c = genColor(position, nColors - 1, colors, dist);
     return applyBrightness(c, brightness);
   }
   
@@ -38,7 +43,15 @@ class ColorWheel {
     return schemes.length;
   }
   
-  private int[] genColor(int idx, int[][] colors, int position, int dist) {
+  public void turn(int step) {
+    wheelPos = (wheelPos + step) % 255;
+  }
+  
+  public void newScheme() {
+    schemeNo = rand.nextInt(schemes.length);
+  }
+  
+  private int[] genColor(int position, int idx, int[][] colors, int dist) {
     position = position - (idx * dist);
     int nColors = colors.length;
     int[] result = new int[3];

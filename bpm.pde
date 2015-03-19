@@ -69,8 +69,6 @@ class BPMDetector {
     }
   
     minim = new Minim(this);                                      //Sets up minim
-  
-    
     //in = minim.getLineIn(Minim.STEREO, 1024);
     //in = minim.getLineIn(Minim.STEREO, 2048);                     //Gets values from mic (and soundcard?)
     in.loop();
@@ -205,6 +203,7 @@ class BPMDetector {
     for (int i = 0; i < beatBands; i += 1) count[i] += 1;
     beatCounter += 1;
     beatPosition += 1;
+    
     return result;
   }
 

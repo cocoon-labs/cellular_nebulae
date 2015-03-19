@@ -1,21 +1,37 @@
 public class Mode {
   
   Panel[] panels;
-  int wheelPos;
   ColorWheel wheel;
+  float fadeFactor;
+  int chance;
 
-  Mode(Panel[] panels, ColorWheel wheel) {
+  Mode(Panel[] panels, ColorWheel wheel, float fadeFactor, int chance) {
     this.panels = panels;
     this.wheel = wheel;
+    this.fadeFactor = fadeFactor;
+    this.chance = chance;
   }
 
-  void update(int wheelPos, int schemeNo) {
+  public void update() {
     if (bpm.isBeat()) {
-      onBeat(wheelPos, schemeNo);
+      onBeat();
+      randomize();
     }
   }
 
-  void onBeat(int wheelPos, int schemeNo) {
+  public void onBeat() {
     // behavior that should only happen on the beat
+  }
+  
+  public void randomize() {
+    if (rand.nextInt(chance) == 0) {
+      wheel.newScheme();
+    }
+  }
+  
+  public void fadeAll(float factor) {
+    for (int i = 0; i < panels.length; i++) {
+      panels[i].fadeAll(factor);
+    }    
   }
 }

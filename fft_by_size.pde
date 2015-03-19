@@ -1,22 +1,30 @@
 public class FFTBySize extends Mode {
+  
+  int freqThresh = 100;
 
-  FFTBySize(Panel[]panels, ColorWheel wheel) {
-    super(panels, wheel);
+  FFTBySize(Panel[] panels, ColorWheel wheel, float fadeFactor, int chance) {
+    super(panels, wheel, fadeFactor, chance);
   }
 
-  void update(int wheelPos, int schemeNo) {
-    super.update(wheelPos, schemeNo);
-    int sizeOffset = 85;
-    int panelOffset = bpm.getBand(2);
-    // Amplitude values between 0 and 255
+  public void update() {
+    super.update();
+    int sizeOffset = bpm.getBand(1);
     int lowAmp = constrain((bpm.getBand(0) + bpm.getBand(1) + bpm.getBand(2) + bpm.getBand(3)), 0, 255);
     int midAmp = constrain((bpm.getBand(4) + bpm.getBand(5) + bpm.getBand(6)) * 4, 0, 255);
     int highAmp = constrain((bpm.getBand(7) + bpm.getBand(8) + bpm.getBand(9)) * 4, 0, 255);
     for (int i = 0; i < panels.length; i++) {
-      panels[i].updateBig(wheel.getColor(schemeNo, wheelPos % 255, lowAmp));
-      panels[i].updateMid(wheel.getColor(schemeNo, (wheelPos + sizeOffset) % 255, midAmp));
-      panels[i].updateSmall(wheel.getColor(schemeNo, (wheelPos + sizeOffset * 2) % 255, highAmp));
-      wheelPos = (wheelPos + panelOffset) % 255;
+      if (lowAmp < freqThresh) panels[i].fadeBig(0.5);
+      else panels[i].updateBig(wheel.getColor(0, lowAmp));
+      if (midAmp < freqThresh) panels[i].fadeMid(0.9);
+      else panels[i].updateMid(wheel.getColor(sizeOffset, midAmp));
+      if (highAmp < freqThresh) panels[i].fadeSmall(0.9);
+      else panels[i].updateSmall(wheel.getColor(sizeOffset * 2, highAmp));
+      //wheelPos = (wheelPos + panelOffset) % 255;
     }
+  }
+  
+  public void onBeat(int wheelPos, int schemeNo) {
+    int panelOffset = bpm.getBand(2);
+    wheel.turn(panelOffset);
   }
 }

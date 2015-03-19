@@ -4,7 +4,6 @@ class Panel {
   int[][] colors = new int[9][3];
   int x, y, diam, placeMin, placeMax;
   int r, g, b;
-  Random rand = new Random();
   int nCircles = 9;
   int dim, tallBound, midBound;
   int squareSide, xOff, yOff;
@@ -46,8 +45,12 @@ class Panel {
       colors[i] = c;
     }
   }
+  
+  public void updateOne(int[] c, int index) {
+    colors[index] = c;
+  }
     
-  protected void placeCircles() {
+  public void placeCircles() {
     for (int i = 0; i < nCircles; i++) {
       if (i == 0) {
         diam = 6 * dim;
@@ -85,7 +88,7 @@ class Panel {
     }
   }
 
-  protected void dumpCircles(PrintWriter writer, int index) {
+  public void dumpCircles(PrintWriter writer, int index) {
     writer.println("=======================");
     writer.println("Panel " + index);
     writer.println("=======================");
@@ -112,8 +115,36 @@ class Panel {
     }
     writer.println();
   }
+  
+  public void fadeAll(float factor) {
+    fadeBig(factor);
+    fadeMid(factor);
+    fadeSmall(factor);
+  }
+  
+  public void fadeBig(float factor) {
+    fadeOne(factor, 0);
+  }
+  
+  public void fadeMid(float factor) {
+    for (int i = 1; i < 4; i++) {
+      fadeOne(factor, i);
+    }
+  }
+  
+  public void fadeSmall(float factor) {
+    for (int i = 4; i < nCircles; i++) {
+      fadeOne(factor, i);
+    }
+  }
+  
+  public void fadeOne(float factor, int index) {
+    colors[index][0] = int(colors[index][0] * factor);
+    colors[index][1] = int(colors[index][1] * factor);
+    colors[index][2] = int(colors[index][2] * factor);
+  }
     
-  protected void draw() {
+  public void draw() {
     fill(0);
     stroke(255);
     strokeWeight(2);

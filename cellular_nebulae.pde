@@ -18,19 +18,21 @@ Minim minim;
 AudioPlayer sound;
 OPC opc;
 
+Random rand = new Random();
+
 void setup() {
   println(created);
   size(displayWidth, displayHeight);
   background(255);
   opc = new OPC(this, "127.0.0.1", 7890);
   
-  field = new Field(3, 4, 100, displayHeight, displayWidth, opc);
   minim = new Minim(this);
   //minim.debugOn();
-  
-  sound = minim.loadFile("cywf.mp3");
+  sound = minim.loadFile("getbusy.mp3");
   bpm = new BPMDetector(sound);
   bpm.setup();
+  
+  field = new Field(2, 6, 100, displayHeight, displayWidth, opc);
 }
 
 void draw() {

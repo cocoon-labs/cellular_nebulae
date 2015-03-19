@@ -1,18 +1,18 @@
 public class GradientBySize extends Mode {
 
-  GradientBySize(Panel[] panels, ColorWheel wheel) {
-    super(panels, wheel);
+  GradientBySize(Panel[] panels, ColorWheel wheel, float fadeFactor, int chance) {
+    super(panels, wheel, fadeFactor, chance);
   }
 
-  void onBeat(int wheelPos, int schemeNo) {
+  public void onBeat() {
     int sizeOffset = bpm.getBand(0);
     int panelOffset = bpm.getBand(2);
     int brightness = 255;
     for (int i = 0; i < panels.length; i++) {
-      panels[i].updateBig(wheel.getColor(schemeNo, wheelPos % 255, brightness));
-      panels[i].updateMid(wheel.getColor(schemeNo, (wheelPos + sizeOffset) % 255, brightness));
-      panels[i].updateSmall(wheel.getColor(schemeNo, (wheelPos + sizeOffset * 2) % 255, brightness));
-      wheelPos = (wheelPos + panelOffset) % 255;
+      panels[i].updateBig(wheel.getColor(0, brightness));
+      panels[i].updateMid(wheel.getColor(sizeOffset, brightness));
+      panels[i].updateSmall(wheel.getColor(sizeOffset * 2, brightness));
+      wheel.turn(panelOffset);
     }      
   }
 
