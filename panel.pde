@@ -18,9 +18,9 @@ class Panel {
     this.yOff = yOff;
       
     for (int i = 0; i < nCircles; i++) {
-	    for (int j = 0; j < 3; j++) {
+      for (int j = 0; j < 3; j++) {
         colors[i][j] = 0;
-	    }
+      }
     }
     this.opc = opc;
   }
@@ -38,13 +38,13 @@ class Panel {
  
   public void updateMid(int[] c) {
     for (int i = 1; i < 4; i++) {
-	    colors[i] = c;
+      colors[i] = c;
     }
   }
     
   public void updateSmall(int[] c) {
     for (int i = 4; i < 9; i++) {
-	    colors[i] = c;
+      colors[i] = c;
     }
   }
   
@@ -107,14 +107,14 @@ class Panel {
         prefix = "\"Small";
       }
 
-	    float x = (circles[i][0] - xOff) / (dim * 1.0);
-	    float y = (circles[i][1] - yOff) / (dim * 1.0);
-	    diam = circles[i][2] / dim;
-	    height = circles[i][3];
-	    writer.println(prefix + counter + " X\"= " + x);
-	    writer.println(prefix + counter + " Y\"= " + y);
-	    writer.println(prefix + counter + " D\"= " + diam);
-	    writer.println(prefix + counter + " H\"= " + height);
+      float x = (circles[i][0] - xOff) / (dim * 1.0);
+      float y = (circles[i][1] - yOff) / (dim * 1.0);
+      diam = circles[i][2] / dim;
+      height = circles[i][3];
+      writer.println(prefix + counter + " X\"= " + x);
+      writer.println(prefix + counter + " Y\"= " + y);
+      writer.println(prefix + counter + " D\"= " + diam);
+      writer.println(prefix + counter + " H\"= " + height);
     }
     writer.println();
   }
@@ -154,11 +154,11 @@ class Panel {
     rect(xOff, yOff, squareSide, squareSide);
 
     for (int i = 0; i < nCircles; i++) {
-	    //println(i);
+      //println(i);
         
-	    noStroke();
-	    fill(colors[i][0], colors[i][1], colors[i][2]);
-	    ellipse(circles[i][0], circles[i][1], circles[i][2], circles[i][2]);
+      noStroke();
+      fill(colors[i][0], colors[i][1], colors[i][2]);
+      ellipse(circles[i][0], circles[i][1], circles[i][2], circles[i][2]);
     }
   }
 
