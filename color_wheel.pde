@@ -1,6 +1,9 @@
 class ColorWheel {
   int wheelPos = 0;
+  int metaWheelPos = 0;
   int schemeNo = 0;
+
+  private int[][] metaScheme = { {255, 0, 0}, {0, 255, 0}, {0, 0, 255} };
   
   private int[][][] schemes = {
    { {255, 0, 0}, {177, 67, 226}, {0, 0, 255} }, // red purple blue
@@ -11,10 +14,15 @@ class ColorWheel {
    { {177, 0, 177}, {77, 17, 71}, {247, 77, 7} }, // sevens
    { {128, 0, 255}, {0, 0, 0}, {255, 128, 0} }, // orpal
    { {255, 0, 0}, {0, 255, 0}, {0, 0, 255} } // rainbow
-  }; 
-  
+  };
+
+  private int[][] scheme = schemes[schemeNo];
+
   public int[] getColor(int offset, int brightness) {
-    int[][] colors = schemes[schemeNo];
+    return getColor(offset, brightness, scheme);
+  }
+
+  public int[] getColor(int offset, int brightness, int[][] colors) {
     int nColors = colors.length;
     int dist = 255 / nColors;
     int[] c = new int[3];
@@ -48,9 +56,14 @@ class ColorWheel {
   }
   
   public void newScheme() {
-    schemeNo = rand.nextInt(schemes.length);
+    // schemeNo = rand.nextInt(schemes.length);
+    metaWheelPos = (metaWheelPos + 23) % 255;
+    for (int i = 0; i < scheme.length; i++) {
+      metaScheme = schemes[rand.nextInt(nSchemes())];
+      scheme[i] = getColor((metaWheelPos) % 255, 255, metaScheme);
+    }
   }
-  
+
   private int[] genColor(int position, int idx, int[][] colors, int dist) {
     position = position - (idx * dist);
     int nColors = colors.length;

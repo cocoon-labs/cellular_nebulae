@@ -44,7 +44,7 @@ void setup() {
 }
 
 void draw() {
-  // processUserInput();
+  processUserInput();
   field.randomize();
   field.update();
   field.draw();
@@ -64,6 +64,10 @@ void processUserInput() {
       // dump the circles
       serialize();
       fileIdx += 1;
+    } else if (key == '\t') {
+      field.newScheme();
+    } else if (key == 'm') {
+      field.mode = (field.mode + 1) % field.modes.length;
     }
   } else if (!keyPressed) {
     justPressed = false;
