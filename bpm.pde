@@ -6,8 +6,8 @@ import processing.serial.*;
 
 class BPMDetector {
 
-  AudioPlayer in;
-  //  AudioInput in;
+  // AudioPlayer in;
+   AudioInput in;
 
   FFT fft;
   
@@ -54,13 +54,13 @@ class BPMDetector {
   float threshold;
   float standardDeviation;
   
-  BPMDetector(AudioPlayer sound) {
-    in = sound;
-  }
-
-  // BPMDetector(AudioInput sound) {
+  // BPMDetector(AudioPlayer sound) {
   //   in = sound;
   // }
+
+  BPMDetector(AudioInput sound) {
+    in = sound;
+  }
   
   //////////////////////////////////
   
@@ -74,14 +74,14 @@ class BPMDetector {
       c[i] = 1.5;
     }
   
-    minim = new Minim(this);                                      //Sets up minim
+    // minim = new Minim(this);                                      //Sets up minim
   
     
     //in = minim.getLineIn(Minim.STEREO, 1024);
     //in = minim.getLineIn(Minim.STEREO, 2048);                     //Gets values from mic (and soundcard?)
 
     // remove this if you wanna line in
-    in.loop();
+    // in.loop();
     fft = new FFT(in.bufferSize(), in.sampleRate());              //Sets up the FFT
     fft.logAverages(30, 5);                                       //Creates a 5 band/oct FFT starting at 40Hz
   }

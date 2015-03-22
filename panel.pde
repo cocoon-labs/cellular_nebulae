@@ -162,13 +162,11 @@ class Panel {
     }
   }
 
-  public void send(int idxOffset) {
-    println("sending");
-    // int color;
-    // for (int i = 0; i < nCircles; i++) {
-    //   color = circles[i][0] << 16 || circles[i][1] << 8 || circles[i][2];
-    //   opc.setPixel(idxOffset + i, color);
-    // }
+  public void ship(int idxOffset) {
+    for (int i = 0; i < nCircles; i++) {
+      opc.setPixel(idxOffset + i, colors[i][0] << 16 | colors[i][1] << 8 | colors[i][2]);
+    }
+    opc.writePixels();
   }
 
   private int randInt(int min, int max) {

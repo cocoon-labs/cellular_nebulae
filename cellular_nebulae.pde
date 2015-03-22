@@ -25,21 +25,21 @@ float sampleRate = 44100;
 
 void setup() {
   // println(created);
-  size(displayWidth, displayHeight);
-  background(255);
+  // size(displayWidth, displayHeight);
+  // background(255);
   opc = new OPC(this, "127.0.0.1", 7890);
   
   minim = new Minim(this);
   //minim.debugOn();
-  sound = minim.loadFile("cywf.mp3");
-  bpm = new BPMDetector(sound);
-  bpm.setup();
-  
-  field = new Field(2, 6, 100, displayHeight, displayWidth, opc);
-
-  // in = minim.getLineIn(Minim.MONO, bufferSize, sampleRate);
-  // bpm = new BPMDetector(in);
+  // sound = minim.loadFile("cywf.mp3");
+  // bpm = new BPMDetector(sound);
   // bpm.setup();
+  
+  field = new Field(1, 2, 100, displayHeight, displayWidth, opc);
+
+  in = minim.getLineIn(Minim.MONO, bufferSize, sampleRate);
+  bpm = new BPMDetector(in);
+  bpm.setup();
   
 }
 
@@ -47,8 +47,8 @@ void draw() {
   processUserInput();
   field.randomize();
   field.update();
-  field.draw();
-  // field.send();
+  // field.draw();
+  field.send();
 }
 
 void processUserInput() {

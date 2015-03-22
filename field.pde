@@ -3,9 +3,9 @@ public class Field {
   Panel[] panels;
   ColorWheel wheel;
 
-  Mode[] modes = new Mode[5];
+  Mode[] modes = new Mode[4];
   int nModes = modes.length;
-  int mode = 4;
+  int mode = 3;
   int beatInterval = 500;
   int delayMultiplier = 5;
   float[] multipliers = {
@@ -47,11 +47,10 @@ public class Field {
 
     wheel = new ColorWheel();
 
-    modes[0] = new GradientBySize(panels, wheel, 0.9, chance);
-    modes[1] = new FFTBySize(panels, wheel, 0.9, chance);
-    modes[2] = new Popcorn(panels, wheel, 0.9, chance);
-    modes[3] = new FFTByPanel(panels, wheel, 0.9, chance);
-    modes[4] = new Chase(panels, wheel, 0.98, chance);
+    modes[0] = new FFTBySize(panels, wheel, 0.9, 100);
+    modes[1] = new Popcorn(panels, wheel, 0.9, chance);
+    modes[2] = new FFTByPanel(panels, wheel, 0.9, chance);
+    modes[3] = new Chase(panels, wheel, 0.98, chance);
   }
   
   public void update() {
@@ -59,9 +58,9 @@ public class Field {
   }
   
   public void randomize() {
-    /*if (rand.nextInt(chance) == 0) {
-      mode = rand.nextInt(nModes);
-    }*/
+    // if (rand.nextInt(chance) == 0) {
+    //   mode = rand.nextInt(nModes);
+    // }
   }
     
   public void draw() {
@@ -72,7 +71,7 @@ public class Field {
 
   public void send() {
     for (int i = 0; i < nPanels; i++) {
-      panels[i].send((i % 4) * panels[0].nCircles);
+      panels[i].ship((i % 4) * panels[0].nCircles);
     }
   }
 
