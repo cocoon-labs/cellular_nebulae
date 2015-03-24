@@ -6,8 +6,8 @@ import processing.serial.*;
 
 class BPMDetector {
 
-  // AudioPlayer in;
-   AudioInput in;
+  AudioPlayer playerIn;
+  AudioInput lineIn;
 
   FFT fft;
   
@@ -54,12 +54,12 @@ class BPMDetector {
   float threshold;
   float standardDeviation;
   
-  // BPMDetector(AudioPlayer sound) {
-  //   in = sound;
-  // }
+  BPMDetector(AudioPlayer sound) {
+    playerIn = sound;
+  }
 
   BPMDetector(AudioInput sound) {
-    in = sound;
+    lineIn = sound;
   }
   
   //////////////////////////////////
@@ -73,17 +73,17 @@ class BPMDetector {
       delta[i] = 0;
       c[i] = 1.5;
     }
-  
-    // minim = new Minim(this);                                      //Sets up minim
-  
-    
-    //in = minim.getLineIn(Minim.STEREO, 1024);
-    //in = minim.getLineIn(Minim.STEREO, 2048);                     //Gets values from mic (and soundcard?)
 
-    // remove this if you wanna line in
-    // in.loop();
-    fft = new FFT(in.bufferSize(), in.sampleRate());              //Sets up the FFT
-    fft.logAverages(30, 5);                                       //Creates a 5 band/oct FFT starting at 40Hz
+    if (playerIn != null) {
+      playerIn.loop();
+      fft = new FFT(playerIn.bufferSize(), playerIn.sampleRate());
+    } else {
+      fft = new FFT(lineIn.bufferSize(), lineIn.sampleRate());
+    }
+
+    //Creates a 5 band/oct FFT starting at 40Hz
+    fft.logAverages(30, 5);
+
   }
   
   //////////////////////////////////
@@ -94,7 +94,13 @@ class BPMDetector {
     if (deltaPosition >= deltaArraySamples) deltaPosition = 0;
     if (beatPosition >= beatAverageSamples) beatPosition = 0;
   
-    fft.forward(in.mix);                                          //Performs the FFT
+    if (playerIn != null) {
+      fft.forward(playerIn.mix);                                  //Performs the FFT
+    }
+    else {
+      fft.forward(lineIn.mix);
+    }
+
     int w = int(width/fft.avgSize());                             //Scales the FFT
   
     /////////////////////////////////////Calculate short and long term array averages///////////////////////////////////////////////////////////////////////////////////////////////////////////

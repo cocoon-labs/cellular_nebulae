@@ -3,6 +3,8 @@ class ColorWheel {
   int metaWheelPos = 0;
   int schemeNo = 0;
 
+  int colorThreshold = 128;
+
   private int[][] metaScheme = { {255, 0, 0}, {0, 255, 0}, {0, 0, 255} };
   
   private int[][][] schemes = {
@@ -17,6 +19,10 @@ class ColorWheel {
   };
 
   private int[][] scheme = schemes[schemeNo];
+
+  ColorWheel() {
+    newScheme();
+  }
 
   public int[] getColor(int offset, int brightness) {
     return getColor(offset, brightness, scheme);
@@ -34,7 +40,7 @@ class ColorWheel {
         return applyBrightness(c, brightness);
       }
     }
-      
+    
     c = genColor(position, nColors - 1, colors, dist);
     return applyBrightness(c, brightness);
   }
@@ -56,12 +62,39 @@ class ColorWheel {
   }
   
   public void newScheme() {
-    // schemeNo = rand.nextInt(schemes.length);
-    metaWheelPos = (metaWheelPos + 23) % 255;
-    for (int i = 0; i < scheme.length; i++) {
-      metaScheme = schemes[rand.nextInt(nSchemes())];
-      scheme[i] = getColor((metaWheelPos) % 255, 255, metaScheme);
+    scheme[0] = getColor(0, 255);
+    int[] newColor = scheme[0];
+    while (euclideanDistance(scheme[0], newColor) < colorThreshold) {
+      newColor = randColor();
     }
+    scheme[1] = newColor;
+      
+    while (euclideanDistance(scheme[0], newColor) < colorThreshold ||
+           euclideanDistance(scheme[1], newColor) < colorThreshold) {
+      newColor = randColor();
+    }
+    scheme[2] = newColor;
+    
+    wheelPos = 0;
+    println("[" + 
+            strColor(scheme[0]) + ", " + 
+            strColor(scheme[1]) + ", " + 
+            strColor(scheme[2]) + 
+            "]");
+  }
+
+  private int[] getComplement(int[] c) {
+    int[] newC = new int[3];
+
+    for (int i = 0; i < 3; i++) {
+      newC[i] = 255 - c[i];
+    }
+
+    return newC;
+  }
+
+  private int[] randColor() {
+    return new int[] { rand.nextInt(256), rand.nextInt(256), rand.nextInt(256) };
   }
 
   private int[] genColor(int position, int idx, int[][] colors, int dist) {
@@ -76,5 +109,17 @@ class ColorWheel {
             dist);
     }
     return result;
+  }
+
+  private double euclideanDistance(int[] c1, int[] c2) {
+    double sumOfCubes = 
+      Math.pow(Math.abs(c2[0] - c1[0]), 3) +
+      Math.pow(Math.abs(c2[1] - c1[1]), 3) +
+      Math.pow(Math.abs(c2[2] - c1[2]), 3);
+    return  Math.pow(sumOfCubes, 1.0/3);
+  }
+
+  private String strColor(int[] c) {
+    return "(" + c[0] + ", " + c[1] + ", " + c[2] + ")";
   }
 } 

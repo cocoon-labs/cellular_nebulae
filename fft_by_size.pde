@@ -23,7 +23,7 @@ public class FFTBySize extends Mode {
     }
   }
   
-  public void onBeat(int wheelPos, int schemeNo) {
+  public void onBeat() {
     int panelOffset = bpm.getBand(2);
     wheel.turn(panelOffset);
   }

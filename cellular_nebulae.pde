@@ -9,7 +9,9 @@ Field field;
 
 // files and crap
 int fileIdx = 1;
-String fname = "/Users/oren/Documents/Processing/ds_circles/arrangements/" + (new Date()).toString();
+String fname = 
+  "/Users/oren/Documents/Processing/ds_circles/arrangements/" +
+  (new Date()).toString();
 boolean created = new File(fname).mkdir();
 
 // audio crap
@@ -22,33 +24,36 @@ OPC opc;
 Random rand = new Random();
 int bufferSize = 1024;
 float sampleRate = 44100;
+static String[] args;
+String song = "cywf.mp3";
 
 void setup() {
-  // println(created);
-  // size(displayWidth, displayHeight);
-  // background(255);
-  opc = new OPC(this, "127.0.0.1", 7890);
-  
   minim = new Minim(this);
-  //minim.debugOn();
-  // sound = minim.loadFile("cywf.mp3");
-  // bpm = new BPMDetector(sound);
-  // bpm.setup();
-  
-  field = new Field(1, 2, 100, displayHeight, displayWidth, opc);
 
-  in = minim.getLineIn(Minim.MONO, bufferSize, sampleRate);
-  bpm = new BPMDetector(in);
+  minim.debugOn();
+
+  // if (args.length > 0 && args[0] == "--prod=true") {
+  //   in = minim.getLineIn(Minim.MONO, bufferSize, sampleRate);
+  //   bpm = new BPMDetector(in);
+  // } else {
+    size(displayWidth, displayHeight);
+    background(255);
+    minim = new Minim(this);
+    sound = minim.loadFile(song);
+    bpm = new BPMDetector(sound);
+  // }
   bpm.setup();
-  
+
+  opc = new OPC(this, "127.0.0.1", 7890);
+  field = new Field(3, 4, 100, displayHeight, displayWidth, opc);
 }
 
 void draw() {
   processUserInput();
   field.randomize();
   field.update();
-  // field.draw();
-  field.send();
+  field.draw();
+  // field.send();
 }
 
 void processUserInput() {
@@ -87,3 +92,8 @@ void stop() {
   sound.close();
   minim.stop();
 }
+
+// static public void main(String[] argv) {
+//   args = argv.clone();
+//   PApplet.main(new String[] { "cellular_nebulae" });
+// }

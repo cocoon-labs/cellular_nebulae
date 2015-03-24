@@ -27,6 +27,7 @@ public class Mode {
   
   public void randomize() {
     if (rand.nextInt(chance) == 0) {
+      println("---------------");
       wheel.newScheme();
     }
   }
