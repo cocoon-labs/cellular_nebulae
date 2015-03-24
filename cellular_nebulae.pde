@@ -25,7 +25,7 @@ Random rand = new Random();
 int bufferSize = 1024;
 float sampleRate = 44100;
 static String[] args;
-String song = "cywf.mp3";
+String song = "citylife.mp3";
 
 void setup() {
   minim = new Minim(this);
@@ -45,7 +45,7 @@ void setup() {
   bpm.setup();
 
   opc = new OPC(this, "127.0.0.1", 7890);
-  field = new Field(3, 4, 100, displayHeight, displayWidth, opc);
+  field = new Field(2, 6, 100, displayHeight, displayWidth, opc);
 }
 
 void draw() {

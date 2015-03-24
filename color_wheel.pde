@@ -76,11 +76,11 @@ class ColorWheel {
     scheme[2] = newColor;
     
     wheelPos = 0;
-    println("[" + 
+    /*println("[" + 
             strColor(scheme[0]) + ", " + 
             strColor(scheme[1]) + ", " + 
             strColor(scheme[2]) + 
-            "]");
+            "]");*/
   }
 
   private int[] getComplement(int[] c) {
@@ -122,4 +122,4 @@ class ColorWheel {
   private String strColor(int[] c) {
     return "(" + c[0] + ", " + c[1] + ", " + c[2] + ")";
   }
-} 
+}

@@ -12,7 +12,7 @@ public class FFTBySize extends Mode {
     int lowAmp = constrain((bpm.getBand(0) + bpm.getBand(1) + bpm.getBand(2) + bpm.getBand(3)), 0, 255);
     int midAmp = constrain((bpm.getBand(4) + bpm.getBand(5) + bpm.getBand(6)) * 4, 0, 255);
     int highAmp = constrain((bpm.getBand(7) + bpm.getBand(8) + bpm.getBand(9)) * 4, 0, 255);
-    for (int i = 0; i < panels.length; i++) {
+    for (int i = 0; i < nPanels; i++) {
       if (lowAmp < freqThresh) panels[i].fadeBig(0.5);
       else panels[i].updateBig(wheel.getColor(0, lowAmp));
       if (midAmp < freqThresh) panels[i].fadeMid(0.9);

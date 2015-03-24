@@ -27,32 +27,53 @@ public class Mode {
   
   public void randomize() {
     if (rand.nextInt(chance) == 0) {
-      println("---------------");
       wheel.newScheme();
     }
   }
   
   public void fadeAll(float factor) {
-    for (int i = 0; i < panels.length; i++) {
+    for (int i = 0; i < nPanels; i++) {
       panels[i].fadeAll(factor);
     }    
   }
 
   public void fadeBig(float factor) {
-    for (int i = 0; i < panels.length; i++) {
+    for (int i = 0; i < nPanels; i++) {
       panels[i].fadeBig(factor);
     }    
   }
 
   public void fadeMid(float factor) {
-    for (int i = 0; i < panels.length; i++) {
+    for (int i = 0; i < nPanels; i++) {
       panels[i].fadeMid(factor);
     }    
   }
   
   public void fadeSmall(float factor) {
-    for (int i = 0; i < panels.length; i++) {
+    for (int i = 0; i < nPanels; i++) {
       panels[i].fadeSmall(factor);
     }    
+  }
+  
+  public void updateByIndex(int[] c, int index) {
+    panels[index / 9].updateOne(c, index % 9);
+  }
+  
+  public void updateBig(int[] c) {
+    for (int i = 0; i < nPanels; i++) {
+      panels[i].updateBig(c);
+    }
+  }
+  
+  public void updateMid(int[] c) {
+    for (int i = 0; i < nPanels; i++) {
+      panels[i].updateMid(c);
+    }
+  }
+  
+  public void updateSmall(int[] c) {
+    for (int i = 0; i < nPanels; i++) {
+      panels[i].updateSmall(c);
+    }
   }
 }
