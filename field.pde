@@ -3,9 +3,9 @@ public class Field {
   Panel[] panels;
   ColorWheel wheel;
 
-  Mode[] modes = new Mode[5];
+  Mode[] modes = new Mode[6];
   int nModes = modes.length;
-  int mode = 4;
+  int mode = 5;
   int beatInterval = 500;
   int delayMultiplier = 5;
   float[] multipliers = {
@@ -54,6 +54,7 @@ public class Field {
     //modes[4] = new GradientWipe(panels, wheel, 0.9, chance);
     //modes[5] = new RandomFade(panels, wheel, 0.9, chance);
     modes[4] = new SpreadByIndex(panels, wheel, 0.9, chance);
+    modes[5] = new Algebra(panels, wheel, 0.99, chance);
   }
   
   public void update() {

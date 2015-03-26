@@ -2,8 +2,7 @@ class ColorWheel {
   int wheelPos = 0;
   int metaWheelPos = 0;
   int schemeNo = 0;
-
-  int colorThreshold = 128;
+  int vibe = 2;
 
   private int[][] metaScheme = { {255, 0, 0}, {0, 255, 0}, {0, 0, 255} };
   
@@ -62,6 +61,26 @@ class ColorWheel {
   }
   
   public void newScheme() {
+    switch(vibe) {
+      case(0) : // DEFAULT
+        genScheme(128);
+        break;
+      case(1) : // WIDE
+        genScheme(255);
+        break;
+      case(2) : // WARM
+        genScheme(280, 420);
+        break;
+      case(3) : // COOL
+        genScheme(62, 284);
+        break;
+      case(4) : // WHITE
+        genSchemeWhite();
+        break;
+    }
+  }
+  
+  public void genScheme(int colorThreshold) {
     scheme[0] = getColor(0, 255);
     int[] newColor = scheme[0];
     while (euclideanDistance(scheme[0], newColor) < colorThreshold) {
@@ -76,11 +95,22 @@ class ColorWheel {
     scheme[2] = newColor;
     
     wheelPos = 0;
-    /*println("[" + 
-            strColor(scheme[0]) + ", " + 
-            strColor(scheme[1]) + ", " + 
-            strColor(scheme[2]) + 
-            "]");*/
+  }
+  
+  public void genScheme(int minHue, int maxHue) {
+    minHue = (minHue + 360) % 360;
+    maxHue = maxHue % 360;
+    scheme[0] = randColor(minHue, maxHue);
+    scheme[1] = randColor(minHue, maxHue);
+    scheme[2] = randColor(minHue, maxHue);
+    
+    wheelPos = 0;
+  }
+  
+  public void genSchemeWhite() {
+    scheme[0] = new int[] {255, 255, 255};
+    scheme[1] = new int[] {255, 255, 255};
+    scheme[2] = new int[] {255, 255, 255};
   }
 
   private int[] getComplement(int[] c) {
@@ -96,6 +126,25 @@ class ColorWheel {
   private int[] randColor() {
     return new int[] { rand.nextInt(256), rand.nextInt(256), rand.nextInt(256) };
   }
+  
+  private int[] randColor(int minHue, int maxHue) {
+    minHue = (minHue + 360) % 360;
+    maxHue = maxHue % 360;
+    int[] c = new int[] { rand.nextInt(256), rand.nextInt(256), rand.nextInt(256) };
+    int hue = getHue(c);
+    if (minHue > maxHue) {
+      while(hue > maxHue && hue < minHue) {
+        c = new int[] { rand.nextInt(256), rand.nextInt(256), rand.nextInt(256) };
+        hue = getHue(c);
+      }
+    } else {
+      while(hue < minHue || hue > maxHue) {
+        c = new int[] { rand.nextInt(256), rand.nextInt(256), rand.nextInt(256) };
+        hue = getHue(c);
+      }
+    }
+    return c;
+  }
 
   private int[] genColor(int position, int idx, int[][] colors, int dist) {
     position = position - (idx * dist);
@@ -108,6 +157,7 @@ class ColorWheel {
             (colors[(idx+1) % nColors][i] - colors[idx][i]) / 
             dist);
     }
+    println(getHue(result));
     return result;
   }
 
@@ -121,5 +171,10 @@ class ColorWheel {
 
   private String strColor(int[] c) {
     return "(" + c[0] + ", " + c[1] + ", " + c[2] + ")";
+  }
+  
+  private int getHue(int[] c) {
+    float[] hsb = Color.RGBtoHSB(c[0], c[1], c[2], null);
+    return (int) (360 * hsb[0]);
   }
 }

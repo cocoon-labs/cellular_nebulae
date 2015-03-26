@@ -1,6 +1,7 @@
 import java.util.Random;
 import java.lang.Math;
 import java.util.Date;
+import java.awt.Color;
 import ddf.minim.analysis.*;
 import ddf.minim.*;
 
@@ -45,7 +46,7 @@ void setup() {
   bpm.setup();
 
   opc = new OPC(this, "127.0.0.1", 7890);
-  field = new Field(2, 6, 100, displayHeight, displayWidth, opc);
+  field = new Field(3, 4, 100, displayHeight, displayWidth, opc);
 }
 
 void draw() {

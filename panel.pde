@@ -51,6 +51,26 @@ class Panel {
   public void updateOne(int[] c, int index) {
     colors[index] = c;
   }
+  
+  public int[] getOne(int index) {
+    return colors[index];
+  }
+  
+  public int[] getMidAverage() {
+    int[] average = new int[3];
+    for (int i = 0; i < 3; i++) {
+      average[i] = (colors[1][i] + colors[2][i] + colors[3][i]) / 3;
+    }
+    return average;
+  }
+  
+  public int[] getSmallAverage() {
+    int[] average = new int[3];
+    for (int i = 0; i < 3; i++) {
+      average[i] = (colors[4][i] + colors[5][i] + colors[6][i] + colors[7][i] + colors[8][i]) / 5;
+    }
+    return average;
+  }
     
   public void placeCircles() {
     for (int i = 0; i < nCircles; i++) {

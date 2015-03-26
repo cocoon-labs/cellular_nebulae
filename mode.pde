@@ -59,6 +59,12 @@ public class Mode {
     panels[index / 9].updateOne(c, index % 9);
   }
   
+  public void updateBySubIndex(int[] c, int index) {
+    for (int i = 0; i < nPanels; i++) {
+      panels[i].updateOne(c, index);
+    }
+  }
+  
   public void updateBig(int[] c) {
     for (int i = 0; i < nPanels; i++) {
       panels[i].updateBig(c);
