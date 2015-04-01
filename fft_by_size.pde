@@ -1,6 +1,6 @@
 public class FFTBySize extends Mode {
   
-  int freqThresh = 100;
+  int freqThresh = 80;
 
   FFTBySize(Panel[] panels, ColorWheel wheel, float fadeFactor, int chance) {
     super(panels, wheel, fadeFactor, chance);

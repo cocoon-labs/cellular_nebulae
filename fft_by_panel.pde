@@ -4,6 +4,7 @@ public class FFTByPanel extends Mode {
   int freqThresh = 100;
   float fadeFactor = 0.99;
   int ampFactor = 20;
+  int beatOffset = 11;
 
   FFTByPanel(Panel[] panels, ColorWheel wheel, float fadeFactor, int chance) {
     super(panels, wheel, fadeFactor, chance);
@@ -21,7 +22,7 @@ public class FFTByPanel extends Mode {
   }
   
   public void onBeat() {
-    wheel.turn(bpm.getBand(2));
+    wheel.turn(beatOffset);
     if (rand.nextInt(64) == 0) {
       assignOneBand(rand.nextInt(nPanels));
     }

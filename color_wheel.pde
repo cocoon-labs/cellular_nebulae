@@ -2,7 +2,7 @@ class ColorWheel {
   int wheelPos = 0;
   int metaWheelPos = 0;
   int schemeNo = 0;
-  int vibe = 2;
+  int vibe = 0;
 
   private int[][] metaScheme = { {255, 0, 0}, {0, 255, 0}, {0, 0, 255} };
   
@@ -65,16 +65,13 @@ class ColorWheel {
       case(0) : // DEFAULT
         genScheme(128);
         break;
-      case(1) : // WIDE
-        genScheme(255);
-        break;
-      case(2) : // WARM
+      case(1) : // WARM
         genScheme(280, 420);
         break;
-      case(3) : // COOL
+      case(2) : // COOL
         genScheme(62, 284);
         break;
-      case(4) : // WHITE
+      case(3) : // WHITE
         genSchemeWhite();
         break;
     }
@@ -157,7 +154,6 @@ class ColorWheel {
             (colors[(idx+1) % nColors][i] - colors[idx][i]) / 
             dist);
     }
-    println(getHue(result));
     return result;
   }
 

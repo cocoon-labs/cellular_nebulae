@@ -2,11 +2,11 @@ public class Algebra extends Mode {
   
   int nPixels = nPanels * 9;
   int updateCounter = 0;
-  int updateLength = 3;
+  int loopsPerUpdate = 3;
   int addCounter = 0;
   int addLength = 1;
   int opIndex = 0;
-  int nOps = 4;
+  int nOps = 5;
   int opChance = 50;
   int wheelStep = 10;
   
@@ -22,7 +22,7 @@ public class Algebra extends Mode {
       randomOperation(1);
       fadeAll(fadeFactor);
     }
-    updateCounter = (updateCounter + 1) % updateLength;
+    updateCounter = (updateCounter + 1) % loopsPerUpdate;
   }
   
   public void onBeat() {
@@ -40,7 +40,9 @@ public class Algebra extends Mode {
     if (rand.nextInt(chance) == 0) {
       wheelStep = 1 + rand.nextInt(30);
     }
-    
+    if (rand.nextInt(chance) == 0) {
+      loopsPerUpdate = 1 + rand.nextInt(4);
+    }
   }
   
   // Operations
@@ -64,6 +66,9 @@ public class Algebra extends Mode {
         break;
       case(4):
         shiftDown();
+        break;
+      case(5):
+        pulseBigs(2, 80);
         break;
     }
   }
