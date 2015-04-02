@@ -16,7 +16,6 @@ public class Popcorn extends Mode {
   
   public void onBeat() {
     // Choose random pixels and light up with beat
-    int nPixels = nPanels * 9;
     int nToLight = 1 + rand.nextInt(18);
     for (int i = 0; i < nToLight; i++) {
       int iPixel = rand.nextInt(nPixels);

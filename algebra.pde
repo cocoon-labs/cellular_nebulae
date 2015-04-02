@@ -1,6 +1,5 @@
 public class Algebra extends Mode {
   
-  int nPixels = nPanels * 9;
   int updateCounter = 0;
   int loopsPerUpdate = 3;
   int addCounter = 0;

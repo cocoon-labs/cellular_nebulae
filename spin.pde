@@ -2,7 +2,6 @@ public class Spin extends Algebra {
   
   int pixelOffset = 3;
   int brightness = 255;
-  int nPixels = nPanels * 9;
   int index;
   boolean speedingUp = true;
   boolean spinUp = true;

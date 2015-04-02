@@ -3,9 +3,9 @@ public class Field {
   Panel[] panels;
   ColorWheel wheel;
 
-  Mode[] modes = new Mode[7];
+  Mode[] modes = new Mode[9];
   int nModes = modes.length;
-  int mode = 6;
+  int mode = 8;
   int beatInterval = 500;
   int delayMultiplier = 5;
   float[] multipliers = {
@@ -56,6 +56,8 @@ public class Field {
     modes[4] = new SpreadByIndex(panels, wheel, 0.9, chance);
     modes[5] = new Algebra(panels, wheel, 0.99, chance);
     modes[6] = new Spin(panels, wheel, 0.95, chance);
+    modes[7] = new StarTrek(panels, wheel, 1.1, chance);
+    modes[8] = new Breathe(panels, wheel, 0.98, 1.05, chance);
   }
   
   public void update() {

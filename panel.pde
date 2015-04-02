@@ -2,6 +2,8 @@ class Panel {
     
   int[][] circles = new int[9][4];
   int[][] colors = new int[9][3];
+  int[][] targetColors = new int[9][3];
+  float[] brightVals = new float[9];
   int x, y, diam, placeMin, placeMax;
   int r, g, b;
   int nCircles = 9;
@@ -20,7 +22,9 @@ class Panel {
     for (int i = 0; i < nCircles; i++) {
       for (int j = 0; j < 3; j++) {
         colors[i][j] = 0;
+        targetColors[i][j] = 0;
       }
+      brightVals[i] = 0;
     }
     this.opc = opc;
   }
@@ -205,5 +209,33 @@ class Panel {
   
   private double cartesianDistance(int x1, int y1, int x2, int y2) {
     return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
+  }
+  
+  public void fadeAllIn(float factor) {
+    for (int i = 0; i < nCircles; i++) {
+      brightVals[i] = constrain(factor * brightVals[i], 0, 255);
+    }
+  }
+  
+  public void fadeAllIn(float factor, int maxBrightness) {
+    for (int i = 0; i < nCircles; i++) {
+      brightVals[i] = factor * brightVals[i];
+      if (brightVals[i] > maxBrightness)
+        brightVals[i] = 0;
+    }
+  }
+  
+  public void fadeAllOut(float factor) {
+    for (int i = 0; i < nCircles; i++) {
+      brightVals[i] = factor * brightVals[i];
+    }
+  }
+  
+  public void refreshColors() {
+    for (int i = 0; i < nCircles; i++) {
+      colors[i][0] = int(map(brightVals[i], 0, 255, 0, targetColors[i][0]));
+      colors[i][1] = int(map(brightVals[i], 0, 255, 0, targetColors[i][1]));
+      colors[i][2] = int(map(brightVals[i], 0, 255, 0, targetColors[i][2]));
+    }
   }
 }

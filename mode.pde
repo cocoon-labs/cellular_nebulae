@@ -4,7 +4,7 @@ public class Mode {
   ColorWheel wheel;
   float fadeFactor;
   int chance;
-  int nPanels;
+  int nPanels, nPixels;
 
   Mode(Panel[] panels, ColorWheel wheel, float fadeFactor, int chance) {
     this.panels = panels;
@@ -12,6 +12,7 @@ public class Mode {
     this.fadeFactor = fadeFactor;
     this.chance = chance;
     this.nPanels = panels.length;
+    nPixels = nPanels * 9;
   }
 
   public void update() {
@@ -62,6 +63,12 @@ public class Mode {
     for (int i = 0; i < nPanels; i++) {
       panels[i].fadeSmall(factor);
     }    
+  }
+  
+  public void refreshColors() {
+    for (int i = 0; i < nPanels; i++) {
+      panels[i].refreshColors();
+    }
   }
   
   public void updateByIndex(int[] c, int index) {
