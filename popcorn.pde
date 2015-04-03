@@ -24,5 +24,4 @@ public class Popcorn extends Mode {
     }
     wheel.turn(beatOffset);
   }
-  
 }

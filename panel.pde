@@ -10,14 +10,16 @@ class Panel {
   int dim, tallBound, midBound;
   int squareSide, xOff, yOff;
   OPC opc;
+  ColorWheel wheel;
     
-  Panel(int squareSide, int xOff, int yOff, OPC opc) {
+  Panel(int squareSide, int xOff, int yOff, OPC opc, ColorWheel wheel) {
     this.dim = squareSide / 18;
     this.tallBound = 4 * dim;
     this.midBound = 7 * dim;
     this.squareSide = squareSide;
     this.xOff = xOff;
     this.yOff = yOff;
+    this.wheel = wheel;
       
     for (int i = 0; i < nCircles; i++) {
       for (int j = 0; j < 3; j++) {
@@ -238,4 +240,8 @@ class Panel {
       colors[i][2] = int(map(brightVals[i], 0, 255, 0, targetColors[i][2]));
     }
   }
+  
+  public int getPixelAmp(int i) {
+    return (colors[i][0] + colors[i][1] + colors[i][2]) / 3;
+  } 
 }

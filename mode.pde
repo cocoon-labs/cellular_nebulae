@@ -5,6 +5,7 @@ public class Mode {
   float fadeFactor;
   int chance;
   int nPanels, nPixels;
+  boolean justEntered = false;
 
   Mode(Panel[] panels, ColorWheel wheel, float fadeFactor, int chance) {
     this.panels = panels;
@@ -65,6 +66,10 @@ public class Mode {
     }    
   }
   
+  public void fadeOne(float factor, int index) {
+    panels[index / 9].fadeOne(factor, index % 9);
+  }
+  
   public void refreshColors() {
     for (int i = 0; i < nPanels; i++) {
       panels[i].refreshColors();
@@ -96,6 +101,45 @@ public class Mode {
   public void updateSmall(int[] c) {
     for (int i = 0; i < nPanels; i++) {
       panels[i].updateSmall(c);
+    }
+  }
+  
+  public void updateMidOnPanel(int iPanel, int initOffset, int brightness, int pixelOffset) {
+    for (int iPixel = 1; iPixel < 4; iPixel++) {
+      int offset = (initOffset + iPixel * pixelOffset) % 255;
+      panels[iPanel].updateOne(wheel.getColor(offset, brightness), iPixel);
+    }
+  }
+  
+  public void updateSmallOnPanel(int iPanel, int initOffset, int brightness, int pixelOffset) {
+    for (int iPixel = 4; iPixel < 9; iPixel++) {
+      int offset = (initOffset + iPixel * pixelOffset) % 255;
+      panels[iPanel].updateOne(wheel.getColor(offset, brightness), iPixel);
+    }
+  }
+  
+  public void fadeAllInThenDisappear(float factor) {
+    for (int i = 0; i < nPanels; i++) {
+      panels[i].fadeAllIn(factor, 255);
+    }
+  }
+  
+  public void fadeAllIn(float factor) {
+    for (int i = 0; i < nPanels; i++) {
+      panels[i].fadeAllIn(factor);
+    }
+  }
+  
+  public void turnOnAll(int wheelOffset, int brightness) {
+    for (int i = 0; i < nPixels; i++) {
+      panels[i / 9].targetColors[i % 9] = wheel.getColor(wheelOffset, 255);
+      panels[i / 9].brightVals[i % 9] = brightness;
+    } 
+  }
+  
+  public void fadeAllOut(float factor) {
+    for (int i = 0; i < nPanels; i++) {
+      panels[i].fadeAllOut(factor);
     }
   }
 }

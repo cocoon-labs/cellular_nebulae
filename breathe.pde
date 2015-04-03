@@ -1,64 +1,70 @@
 public class Breathe extends Mode {
   
-  boolean isFadingIn;
   float fadeInFactor;
-  float minBrightness = 0.1;
+  int loopCounter = 0;
+  int sinLength = 100;
+  boolean fadingIn = false;
+  int fadeCounter = 0;
   
   Breathe(Panel[] panels, ColorWheel wheel, float fadeFactor, float fadeInFactor, int chance) {
     super(panels, wheel, fadeFactor, chance);
     this.fadeInFactor = fadeInFactor;
-    isFadingIn = true;
     turnOnAll(0, 1);
   }
   
   public void update() {
-    super.update();
-    float brightness = panels[0].brightVals[0];
-    if (isFadingIn) {
-      if (brightness < 255) {
-        fadeAllIn(fadeInFactor);
-      } else {
-        isFadingIn = false;
+    if (justEntered) {
+      fadeOnAll(0,2);
+      refreshColors();
+      justEntered = false;
+      fadeCounter = 0;
+      fadingIn = true;
+      super.update();
+      loopCounter = sinLength / 4;
+    } else if (fadingIn) {
+      fadeAllIn(fadeInFactor);
+      for (int i = 0; i < nPixels; i++) {  
+        panels[i / 9].targetColors[i % 9] = wheel.getColor(0, 255);
       }
+      refreshColors();
+      if (fadeCounter < 73)
+        fadeCounter++;
+      else
+        fadingIn = false;
+      super.update();
     } else {
-      if (brightness > minBrightness) {
-        fadeAllOut(fadeFactor);
-      } else {
-        isFadingIn = true;
-        turnOnAll(0, 1);
-      }
+      super.update();
+      float sinFactor = 2.0 * PI / sinLength;
+      int brightness = (int) map(sin(sinFactor * loopCounter), -1, 1, 0, 255);
+      turnOnAll(0, brightness);
+      refreshColors();
+      loopCounter = (loopCounter + 1) % (sinLength + 1);
     }
-    refreshColors();
-    wheel.turn(1);
   }
   
   public void onBeat() {
-    
-  }
-  
-  public void turnOnAll(int wheelOffset, int brightness) {
-    for (int i = 0; i < nPixels; i++) {
-      panels[i / 9].targetColors[i % 9] = wheel.getColor(wheelOffset, 255);
-      panels[i / 9].brightVals[i % 9] = brightness;
-    } 
-  }
-  
-  public void fadeAllIn(float factor) {
-    for (int i = 0; i < nPanels; i++) {
-      panels[i].fadeAllIn(factor);
-    }
-  }
-  
-  public void fadeAllOut(float factor) {
-    for (int i = 0; i < nPanels; i++) {
-      panels[i].fadeAllOut(factor);
-    }
+    if (!justEntered && !fadingIn) wheel.turn(3);
   }
   
   public void randomize() {
     super.randomize();
-    if (rand.nextInt(chance) == 0) {
-      //fadeFactor = 1.01 + rand.nextInt(50) / 100.0;
+    if (rand.nextInt(1) == 0 &&
+         ((loopCounter == (sinLength / 4)) ||
+           (loopCounter == (3 * sinLength / 4)))) {
+      sinLength = 50 + rand.nextInt(150);
     }
+  }
+  
+  public void fadeOnAll(int wheelOffset, int brightness) {
+    for (int i = 0; i < nPixels; i++) {
+      int pixelAmp = panels[i / 9].getPixelAmp(i % 9);
+      if (pixelAmp == 0) {
+        panels[i / 9].targetColors[i % 9] = wheel.getColor(wheelOffset, 255);
+        panels[i / 9].brightVals[i % 9] = brightness;
+      } else {
+        panels[i / 9].targetColors[i % 9] = wheel.getColor(wheelOffset, 255);
+        panels[i / 9].brightVals[i % 9] = pixelAmp;
+      }
+    } 
   }
 }

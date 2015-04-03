@@ -6,7 +6,7 @@ public class StarTrek extends Mode {
   }
   
   public void update() {
-    fadeAllIn(fadeFactor);
+    fadeAllInThenDisappear(fadeFactor);
     turnOnPixels(rand.nextInt(10), 0, 1);
     super.update();
     refreshColors();
@@ -24,18 +24,6 @@ public class StarTrek extends Mode {
         panels[i / 9].brightVals[i % 9] = brightness;
       }
     } 
-  }
-  
-  public void fadeAllIn(float factor) {
-    for (int i = 0; i < nPanels; i++) {
-      panels[i].fadeAllIn(factor, 255);
-    }
-  }
-  
-  public void refreshColors() {
-    for (int i = 0; i < nPanels; i++) {
-      panels[i].refreshColors();
-    }
   }
   
   public void randomize() {

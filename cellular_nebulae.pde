@@ -22,11 +22,15 @@ AudioPlayer sound;
 AudioInput in;
 OPC opc;
 
+// remote stuff
+int globalBrightness = 255;
+boolean modeSwitching = false;
+
 Random rand = new Random();
 int bufferSize = 1024;
 float sampleRate = 44100;
 static String[] args;
-String song = "sio.mp3";
+String song = "getbusy.mp3";
 
 void setup() {
   minim = new Minim(this);
@@ -60,9 +64,10 @@ void draw() {
 void processUserInput() {
   if (keyPressed && !justPressed) {
     justPressed = true;
-    if ('a' <= key && key < 'a' + field.nPanels) {
-      field.placeCircles(key - 'a');
-    } else if (key == '\n') {
+//    if ('a' <= key && key < 'a' + field.nPanels) {
+//      field.placeCircles(key - 'a');
+//    } else
+    if (key == '\n') {
       
       // save the frame
       save(fname + "/arrangement_" + fileIdx + ".png");
@@ -73,7 +78,22 @@ void processUserInput() {
     } else if (key == '\t') {
       field.newScheme();
     } else if (key == 'm') {
-      field.mode = (field.mode + 1) % field.modes.length;
+      field.setMode((field.mode + 1) % field.modes.length);
+    } else if (key == 'd') {
+      globalBrightness = constrain(globalBrightness - 5, 0, 255);
+      println(globalBrightness);
+    } else if (key == 'c') {
+      globalBrightness = constrain(globalBrightness + 5, 0, 255);
+    } else if (key == 'j') {
+      modeSwitching = !modeSwitching;
+    } else if (key == 'g') {
+      field.setVibeWhite();
+    } else if (key == 'b') {
+      field.incVibe();
+    } else if (key >= '2' && key <= '9') {
+      field.setMode(key - 46);
+    } else if (key == '1') {
+      field.incFFTMode();
     }
   } else if (!keyPressed) {
     justPressed = false;

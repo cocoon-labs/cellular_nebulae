@@ -36,12 +36,12 @@ class ColorWheel {
     for (int i = 0; i < nColors; i++) {
       if (position < (i + 1) * dist) {
         c = genColor(position, i, colors, dist);
-        return applyBrightness(c, brightness);
+        return applyBrightness(c, (int) map(brightness, 0, 255, 0, globalBrightness));
       }
     }
     
     c = genColor(position, nColors - 1, colors, dist);
-    return applyBrightness(c, brightness);
+    return applyBrightness(c, (int) map(brightness, 0, 255, 0, globalBrightness));
   }
   
   public int[] applyBrightness(int[] c, int brightness) {
