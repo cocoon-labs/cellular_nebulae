@@ -25,12 +25,13 @@ OPC opc;
 // remote stuff
 int globalBrightness = 255;
 boolean modeSwitching = false;
+int modeC = 0;
 
 Random rand = new Random();
 int bufferSize = 1024;
 float sampleRate = 44100;
 static String[] args;
-String song = "getbusy.mp3";
+String song = "otod.mp3";
 
 void setup() {
   minim = new Minim(this);
@@ -81,19 +82,28 @@ void processUserInput() {
       field.setMode((field.mode + 1) % field.modes.length);
     } else if (key == 'd') {
       globalBrightness = constrain(globalBrightness - 5, 0, 255);
-      println(globalBrightness);
     } else if (key == 'c') {
       globalBrightness = constrain(globalBrightness + 5, 0, 255);
     } else if (key == 'j') {
       modeSwitching = !modeSwitching;
     } else if (key == 'g') {
       field.setVibeWhite();
-    } else if (key == 'b') {
+    } else if (key == 'h') {
       field.incVibe();
     } else if (key >= '2' && key <= '9') {
       field.setMode(key - 46);
     } else if (key == '1') {
       field.incFFTMode();
+    } else if (key == 'a') {
+      modeC = (int) constrain(modeC + 1, 0, 3);
+    } else if (key == 'b') {
+      modeC = (int) constrain(modeC - 1, 0, 3);
+    } else if (key == 'i') {
+      field.setMode(11);
+      field.setVibeWhite();
+      globalBrightness = 255;
+      modeSwitching = false;
+      modeC = 0;
     }
   } else if (!keyPressed) {
     justPressed = false;

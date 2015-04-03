@@ -21,6 +21,7 @@ public class Field {
   };
   int nPanels, chance;
   OPC opc;
+  int[] modeChances = {5000, 1000, 500, 100};
 
   Field(int yDim, int xDim, int chanceFactor, int displayHeight, int displayWidth, OPC opc) {
     int xOff = 0, yOff = 0;
@@ -67,7 +68,7 @@ public class Field {
   }
   
   public void randomize() {
-    if (rand.nextInt(100) == 0 && modeSwitching) {
+    if (rand.nextInt(modeChances[modeC]) == 0 && modeSwitching) {
       setMode(rand.nextInt(nModes));
     }
   }
