@@ -62,9 +62,9 @@ public class Field {
     modes[10] = new Breathe(panels, wheel, 0.97, 1.07, chance);
     modes[11] = new GradientWipe(panels, wheel, 0.9, 1.07, chance);
   }
-  
+
   public void update() {
-    modes[mode].update();
+    modes[mode].advance();
   }
   
   public void randomize() {
@@ -81,7 +81,7 @@ public class Field {
 
   public void send() {
     for (int i = 0; i < nPanels; i++) {
-      panels[i].ship((i % 4) * panels[0].nCircles);
+      panels[i].ship(i * panels[0].nCircles);
     }
   }
 
@@ -119,11 +119,15 @@ public class Field {
   
   public void setMode(int m) {
     mode = m;
-    modes[m].justEntered = true;
+    modes[mode].justEntered = true;
   }
   
   public void incFFTMode() {
     if (mode > 3) mode = 0;
     else mode = (mode + 1) % 4;
+  }
+
+  public void adjustDelay(int step) {
+    modes[mode].adjustDelay(step);
   }
 }

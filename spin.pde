@@ -52,7 +52,6 @@ public class Spin extends Algebra {
   private void spin() {
     if (spinUp) {
       index = (index + nPixels + speed) % nPixels;
-      println(index);
     } else {
       index = (index + nPixels - speed) % nPixels;
     }

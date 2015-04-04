@@ -38,20 +38,21 @@ void setup() {
 
   minim.debugOn();
 
-  // if (args.length > 0 && args[0] == "--prod=true") {
-  //   in = minim.getLineIn(Minim.MONO, bufferSize, sampleRate);
-  //   bpm = new BPMDetector(in);
-  // } else {
-    size(displayWidth, displayHeight);
-    background(255);
-    minim = new Minim(this);
-    sound = minim.loadFile(song);
-    bpm = new BPMDetector(sound);
-  // }
+  // Line in
+  // in = minim.getLineIn(Minim.MONO, bufferSize, sampleRate);
+  // bpm = new BPMDetector(in);
+
+  // MP3 in
+  size(displayWidth, displayHeight);
+  background(255);
+  minim = new Minim(this);
+  sound = minim.loadFile(song);
+  bpm = new BPMDetector(sound);
+
   bpm.setup();
 
   opc = new OPC(this, "127.0.0.1", 7890);
-  field = new Field(3, 4, 500, displayHeight, displayWidth, opc);
+  field = new Field(2, 4, 500, displayHeight, displayWidth, opc);
 }
 
 void draw() {
@@ -76,7 +77,7 @@ void processUserInput() {
       // dump the circles
       serialize();
       fileIdx += 1;
-    } else if (key == '\t') {
+    } else if (key == '\t' || key == 'z') {
       field.newScheme();
     } else if (key == 'm') {
       field.setMode((field.mode + 1) % field.modes.length);
@@ -104,6 +105,10 @@ void processUserInput() {
       globalBrightness = 255;
       modeSwitching = false;
       modeC = 0;
+    } else if (key == 'x') {
+      field.adjustDelay(10);
+    } else if (key == 'y') {
+      field.adjustDelay(-10);
     }
   } else if (!keyPressed) {
     justPressed = false;

@@ -8,6 +8,7 @@ public class SpreadByIndex extends Mode {
 
   SpreadByIndex(Panel[] panels, ColorWheel wheel, float fadeFactor, int chance) {
     super(panels, wheel, fadeFactor, chance);
+    delayable = true;
     resetIndices();
   }
   
