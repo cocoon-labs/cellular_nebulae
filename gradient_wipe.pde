@@ -46,6 +46,9 @@ public class GradientWipe extends Mode {
       wheel.turn(loopOffset);
       loopCounter = (loopCounter + 1) % 3927;
     }
+
+    // TODO: accounts for busted pixel. this may vary depending on setup.
+    updateByIndex(wheel.getColor(0, 0), 88);
   }
   
   public void onBeat() {

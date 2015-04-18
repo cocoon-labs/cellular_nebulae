@@ -5,7 +5,7 @@ public class Field {
 
   Mode[] modes = new Mode[12];
   int nModes = modes.length;
-  int mode = 10;
+  int mode = 11;
   int beatInterval = 500;
   int delayMultiplier = 5;
   float[] multipliers = {

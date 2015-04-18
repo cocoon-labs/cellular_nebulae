@@ -39,28 +39,28 @@ void setup() {
   minim.debugOn();
 
   // Line in
-  // in = minim.getLineIn(Minim.MONO, bufferSize, sampleRate);
-  // bpm = new BPMDetector(in);
+  in = minim.getLineIn(Minim.MONO, bufferSize, sampleRate);
+  bpm = new BPMDetector(in);
 
   // MP3 in
-  size(displayWidth, displayHeight);
-  background(255);
-  minim = new Minim(this);
-  sound = minim.loadFile(song);
-  bpm = new BPMDetector(sound);
+  // size(displayWidth, displayHeight);
+  // background(255);
+  // minim = new Minim(this);
+  // sound = minim.loadFile(song);
+  // bpm = new BPMDetector(sound);
 
   bpm.setup();
 
   opc = new OPC(this, "127.0.0.1", 7890);
-  field = new Field(2, 4, 500, displayHeight, displayWidth, opc);
+  field = new Field(3, 4, 500, displayHeight, displayWidth, opc);
 }
 
 void draw() {
   processUserInput();
   field.randomize();
   field.update();
-  field.draw();
-  // field.send();
+  // field.draw();
+  field.send();
 }
 
 void processUserInput() {
