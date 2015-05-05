@@ -4,6 +4,8 @@ import java.util.Date;
 import java.awt.Color;
 import ddf.minim.analysis.*;
 import ddf.minim.*;
+import oscP5.*;
+import netP5.*;
 
 boolean justPressed = false;
 Field field;
@@ -33,26 +35,34 @@ float sampleRate = 44100;
 static String[] args;
 String song = "otod.mp3";
 
+// Open sound control business
+OscP5 oscP5;
+NetAddress myRemoteLocation;
+
 void setup() {
   minim = new Minim(this);
 
-  minim.debugOn();
+  // minim.debugOn();
 
   // Line in
-  in = minim.getLineIn(Minim.MONO, bufferSize, sampleRate);
-  bpm = new BPMDetector(in);
+  // in = minim.getLineIn(Minim.MONO, bufferSize, sampleRate);
+  // bpm = new BPMDetector(in);
 
   // MP3 in
   // size(displayWidth, displayHeight);
   // background(255);
-  // minim = new Minim(this);
-  // sound = minim.loadFile(song);
-  // bpm = new BPMDetector(sound);
+  sound = minim.loadFile(song);
+  bpm = new BPMDetector(sound);
 
   bpm.setup();
 
   opc = new OPC(this, "127.0.0.1", 7890);
   field = new Field(3, 4, 500, displayHeight, displayWidth, opc);
+
+  oscP5 = new OscP5(this,5001);
+ 
+  // set the remote location to be the localhost on port 5001
+  myRemoteLocation = new NetAddress("192.168.1.101",5001);
 }
 
 void draw() {
@@ -61,6 +71,36 @@ void draw() {
   field.update();
   // field.draw();
   field.send();
+}
+
+void oscEvent(OscMessage theOscMessage) 
+{  
+  println("gotcha");
+
+  // get the first value as an integer
+  float theValue = theOscMessage.get(0).floatValue();
+  // float theValue2 = theOscMessage.get(1).floatValue();
+
+  if (theOscMessage.addrPattern().equals("/1/mode/3/1") && theValue == 1.0) {
+    field.setMode((field.mode + 1) % field.modes.length);
+  } else if (theOscMessage.addrPattern().equals("/1/mode/3/2") && theValue == 1.0) {
+    field.setMode(11);
+    field.setVibeWhite();
+    globalBrightness = 255;
+    modeSwitching = false;
+    modeC = 0;
+  } else if (theOscMessage.addrPattern().equals("/1/mode/3/3") && theValue == 1.0) {
+    field.incVibe();
+  } else if (theOscMessage.addrPattern().equals("/1/mode/3/4") && theValue == 1.0) {
+    field.newScheme();
+  }
+  // print out the message
+  print("OSC Message Recieved: ");
+  println("address pattern: " + theOscMessage.addrPattern());
+  println("type tag: " + theOscMessage.typetag());
+  // println(theValue);
+  // println(theValue2);
+  // println(firstValue + " " + secondValue + " " + thirdValue);
 }
 
 void processUserInput() {
