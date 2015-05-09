@@ -7,17 +7,18 @@ class ColorWheel {
   private int[][] metaScheme = { {255, 0, 0}, {0, 255, 0}, {0, 0, 255} };
   
   private int[][][] schemes = {
-   { {255, 0, 0}, {177, 67, 226}, {0, 0, 255} }, // red purple blue
-   { {218, 107, 44}, {240, 23, 0}, {147, 0, 131} }, // snowskirt
-   { {0, 0, 0}, {128, 0, 255}, {128, 0, 128} }, // royal
-   { {122, 0, 255}, {0, 0, 255}, {0, 88, 205} }, // cool
-   { {0, 0, 0}, {196, 0, 255}, {209, 209, 209} }, // dork
-   { {177, 0, 177}, {77, 17, 71}, {247, 77, 7} }, // sevens
-   { {128, 0, 255}, {0, 0, 0}, {255, 128, 0} }, // orpal
-   { {255, 0, 0}, {0, 255, 0}, {0, 0, 255} } // rainbow
+    { {255, 0, 0}, {0, 255, 0}, {0, 0, 255} }, //rainblow
+    { {255, 0, 0}, {177, 67, 226}, {0, 0, 255} }, // red purple blue
+    { {218, 107, 44}, {240, 23, 0}, {147, 0, 131} }, // snowskirt
+    { {0, 0, 0}, {128, 0, 255}, {128, 0, 128} }, // royal
+    { {122, 0, 255}, {0, 0, 255}, {0, 88, 205} }, // cool
+    { {0, 0, 0}, {196, 0, 255}, {209, 209, 209} }, // dork
+    { {177, 0, 177}, {77, 17, 71}, {247, 77, 7} }, // sevens
+    { {128, 0, 255}, {0, 0, 0}, {255, 128, 0} }, // orpal
+    { {255, 0, 0}, {0, 255, 0}, {0, 0, 255} } // rainbow
   };
 
-  private int[][] scheme = schemes[schemeNo];
+  private int[][] scheme = { {255, 0, 0}, {0, 255, 0}, {0, 0, 255} };
 
   ColorWheel() {
     newScheme();
@@ -110,6 +111,17 @@ class ColorWheel {
     scheme[2] = new int[] {255, 255, 255};
   }
 
+  public void setScheme(int schemeN) {
+    if (schemeN < nSchemes()) {
+      println("changing scheme");
+      println(scheme[0][0]);
+      scheme[0] = schemes[schemeN][0];
+      scheme[1] = schemes[schemeN][1];
+      scheme[2] = schemes[schemeN][2];
+      println(scheme[0][0]);
+    }
+  }
+
   private int[] getComplement(int[] c) {
     int[] newC = new int[3];
 
@@ -173,4 +185,5 @@ class ColorWheel {
     float[] hsb = Color.RGBtoHSB(c[0], c[1], c[2], null);
     return (int) (360 * hsb[0]);
   }
+
 }

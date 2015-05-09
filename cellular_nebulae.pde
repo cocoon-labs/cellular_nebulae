@@ -42,17 +42,19 @@ NetAddress myRemoteLocation;
 void setup() {
   minim = new Minim(this);
 
+  // debug mode (NO PANELS)
+  size(displayWidth, displayHeight);
+  background(255);
+
   // minim.debugOn();
 
   // Line in
-  // in = minim.getLineIn(Minim.MONO, bufferSize, sampleRate);
-  // bpm = new BPMDetector(in);
+  in = minim.getLineIn(Minim.MONO, bufferSize, sampleRate);
+  bpm = new BPMDetector(in);
 
   // MP3 in
-  // size(displayWidth, displayHeight);
-  // background(255);
-  sound = minim.loadFile(song);
-  bpm = new BPMDetector(sound);
+  // sound = minim.loadFile(song);
+  // bpm = new BPMDetector(sound);
 
   bpm.setup();
 
@@ -62,97 +64,105 @@ void setup() {
   oscP5 = new OscP5(this,5001);
  
   // set the remote location to be the localhost on port 5001
-  myRemoteLocation = new NetAddress("192.168.1.101",5001);
+  myRemoteLocation = new NetAddress("192.168.1.253",5001);
 }
 
 void draw() {
-  processUserInput();
   field.randomize();
   field.update();
-  // field.draw();
-  field.send();
+  field.draw();
+  // field.send();
 }
 
 void oscEvent(OscMessage theOscMessage) 
-{  
-  println("gotcha");
-
-  // get the first value as an integer
-  float theValue = theOscMessage.get(0).floatValue();
-  // float theValue2 = theOscMessage.get(1).floatValue();
-
-  if (theOscMessage.addrPattern().equals("/1/mode/3/1") && theValue == 1.0) {
-    field.setMode((field.mode + 1) % field.modes.length);
-  } else if (theOscMessage.addrPattern().equals("/1/mode/3/2") && theValue == 1.0) {
-    field.setMode(11);
-    field.setVibeWhite();
-    globalBrightness = 255;
-    modeSwitching = false;
-    modeC = 0;
-  } else if (theOscMessage.addrPattern().equals("/1/mode/3/3") && theValue == 1.0) {
-    field.incVibe();
-  } else if (theOscMessage.addrPattern().equals("/1/mode/3/4") && theValue == 1.0) {
-    field.newScheme();
-  }
-  // print out the message
-  print("OSC Message Recieved: ");
-  println("address pattern: " + theOscMessage.addrPattern());
-  println("type tag: " + theOscMessage.typetag());
-  // println(theValue);
-  // println(theValue2);
-  // println(firstValue + " " + secondValue + " " + thirdValue);
-}
-
-void processUserInput() {
-  if (keyPressed && !justPressed) {
-    justPressed = true;
-//    if ('a' <= key && key < 'a' + field.nPanels) {
-//      field.placeCircles(key - 'a');
-//    } else
-    if (key == '\n') {
-      
-      // save the frame
-      save(fname + "/arrangement_" + fileIdx + ".png");
-      
-      // dump the circles
-      serialize();
-      fileIdx += 1;
-    } else if (key == '\t' || key == 'z') {
-      field.newScheme();
-    } else if (key == 'm') {
-      field.setMode((field.mode + 1) % field.modes.length);
-    } else if (key == 'd') {
-      globalBrightness = constrain(globalBrightness - 5, 0, 255);
-    } else if (key == 'c') {
-      globalBrightness = constrain(globalBrightness + 5, 0, 255);
-    } else if (key == 'j') {
-      modeSwitching = !modeSwitching;
-    } else if (key == 'g') {
-      field.setVibeWhite();
-    } else if (key == 'h') {
-      field.incVibe();
-    } else if (key >= '2' && key <= '9') {
-      field.setMode(key - 46);
-    } else if (key == '1') {
-      field.incFFTMode();
-    } else if (key == 'a') {
-      modeC = (int) constrain(modeC + 1, 0, 3);
-    } else if (key == 'b') {
-      modeC = (int) constrain(modeC - 1, 0, 3);
-    } else if (key == 'i') {
+{ 
+  String addPatt = theOscMessage.addrPattern();
+  int patLen = addPatt.length();
+  float x, y;
+  int a0, a1;
+  
+  if (addPatt.length() < 3) {
+    println("Page change");
+  } else if (addPatt.equals("/xy0")) {
+    y = theOscMessage.get(0).floatValue();
+    x = theOscMessage.get(1).floatValue();
+    println("x0 = " + x);
+    println("y0 = " + y);
+  } else if (addPatt.equals("/xy1")) {
+    y = theOscMessage.get(0).floatValue();
+    x = theOscMessage.get(1).floatValue();
+    println("x1 = " + x);
+    println("y1 = " + y);
+  } else if (patLen == 9 && addPatt.substring(0, 5).equals("/mode")) {
+    if (theOscMessage.get(0).floatValue() == 1.0) {
+      a0 = 3 - Integer.parseInt(addPatt.substring(6, 7));
+      a1 = Integer.parseInt(addPatt.substring(8, 9)) - 1;
+      field.setMode(4 * a0 + a1);
+    }
+  } else if (patLen == 9 && addPatt.substring(0,7).equals("/faders")) {
+    int faderNum = Integer.parseInt(addPatt.substring(8,9));
+    float faderVal = theOscMessage.get(0).floatValue();
+    switch(faderNum) {
+    case 1: // random speed
+        field.setModeChance(faderVal);
+        break;
+    case 2: // brightness
+        globalBrightness = (int) map(faderVal, 0.0, 1.0, 0.0, 255.0);
+        // int delay = (int) map(faderVal, 0.0, 1.0, 0.0, 500.0);
+        // println("Delay = " + delay + " ms");
+        break;
+    case 3: // delay
+      field.adjustDelay((int) map(faderVal, 0.0, 1.0, 0.0, 255.0));
+    default:
+      // TODO: Add logic for faders 4 and 5 
+      println("Fader " + faderNum + " = " + faderVal);
+      break;
+    }
+  } else if (patLen == 14 && addPatt.substring(0,10).equals("/functions")) {
+    if (theOscMessage.get(0).floatValue() == 1.0) {
+      a0 = 2 - Integer.parseInt(addPatt.substring(11, 12));
+      a1 = Integer.parseInt(addPatt.substring(13, 14)) - 1;
+      int func = 2 * a0 + a1;
+      println(func);
+      switch(func) {
+      case 0: // increment the vibe
+        field.incVibe();
+        break;
+      case 1: // generate a new scheme within the current vibe
+        field.newScheme();
+        break;
+      case 2: // set to rainbow scheme and set back to wide vibe
+        field.setRainbow();
+        break;
+      case 3: // select the white vibe
+        field.setVibeWhite();
+        break;
+      default:
+        println("Not sure which function that was or how you did that...");
+      }
+    }
+  } else if (addPatt.equals("/random")) {
+    if (theOscMessage.get(0).floatValue() == 1.0) {
+      modeSwitching = true;
+    } else modeSwitching = false;
+  } else if (addPatt.equals("/house")) {
+    if (theOscMessage.get(0).floatValue() == 1.0) {
       field.setMode(11);
       field.setVibeWhite();
       globalBrightness = 255;
       modeSwitching = false;
       modeC = 0;
-    } else if (key == 'x') {
-      field.adjustDelay(10);
-    } else if (key == 'y') {
-      field.adjustDelay(-10);
+
+    } else {
+      field.setRainbow();
+      field.newScheme();
     }
-  } else if (!keyPressed) {
-    justPressed = false;
+  } else {
+    print("Unexpected OSC Message Recieved: ");
+    println("address pattern: " + theOscMessage.addrPattern());
+    println("type tag: " + theOscMessage.typetag());
   }
+  
 }
 
 void serialize() {

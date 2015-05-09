@@ -158,7 +158,7 @@ public class Mode {
   public void adjustDelay(int step) {
     // by default, modes do not delay
     if (delayable) {
-      delay += step;
+      delay = step;
     }
   }
 

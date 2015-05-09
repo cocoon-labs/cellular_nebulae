@@ -21,7 +21,7 @@ public class Field {
   };
   int nPanels, chance;
   OPC opc;
-  int[] modeChances = {5000, 1000, 500, 100};
+  int modeChance = 5000;
 
   Field(int yDim, int xDim, int chanceFactor, int displayHeight, int displayWidth, OPC opc) {
     int xOff = 0, yOff = 0;
@@ -68,7 +68,7 @@ public class Field {
   }
   
   public void randomize() {
-    if (rand.nextInt(modeChances[modeC]) == 0 && modeSwitching) {
+    if (rand.nextInt(modeChance) == 0 && modeSwitching) {
       setMode(rand.nextInt(nModes));
     }
   }
@@ -116,6 +116,11 @@ public class Field {
     else wheel.vibe = (wheel.vibe + 1) % 3;
     wheel.newScheme();
   }
+
+  public void setRainbow() {
+    wheel.vibe = 0;
+    wheel.setScheme(0);
+  }
   
   public void setMode(int m) {
     mode = m;
@@ -129,5 +134,9 @@ public class Field {
 
   public void adjustDelay(int step) {
     modes[mode].adjustDelay(step);
+  }
+
+  public void setModeChance(float factor) {
+    modeChance = (int) (5100.0 - 5000.0 * factor);
   }
 }
