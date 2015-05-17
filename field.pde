@@ -135,11 +135,11 @@ public class Field {
   }
 
   public void adjustDelay(int step) {
-    modes[mode].adjustDelay(step);
+    delay = step;
   }
   
   public int getDelay() {
-    return modes[mode].getDelay();
+    return delay;
   }
 
   public void setModeChance(float factor) {
@@ -149,5 +149,16 @@ public class Field {
   
   public float getModeChanceForFader() {
     return faderModeChance;
+  }
+  
+  public void updateAlgebra(float x, float y) {
+    ((Algebra) modes[7]).loopsPerUpdate = 6 - (int) map(x, 0.0, 1.0, 1.0, 5.0);
+    ((Algebra) modes[7]).nToAdd = (int) map(y, 0.0, 1.0, 1.0, 23.0);
+  }
+  
+  public float[] getAlgebraVals() {
+    float x = map(6 - ((Algebra) modes[7]).loopsPerUpdate, 1.0, 5.0, 0.0, 1.0);
+    float y = map(((Algebra) modes[7]).nToAdd, 1.0, 23.0, 0.0, 1.0);
+    return new float[] {x, y};
   }
 }

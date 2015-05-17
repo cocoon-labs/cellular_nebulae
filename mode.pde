@@ -3,7 +3,7 @@ public class Mode {
   Panel[] panels;
   ColorWheel wheel;
   float fadeFactor;
-  int chance, delay;
+  int chance;
   int nPanels, nPixels;
   int prevTime;
   boolean justEntered = false;
@@ -15,14 +15,15 @@ public class Mode {
     this.fadeFactor = fadeFactor;
     this.chance = chance;
     this.nPanels = panels.length;
-    this.delay = 0;
     this.prevTime = millis();
     nPixels = nPanels * 9;
   }
 
   public void advance() {
     int time = millis();
-    if (delay == 0 || (time - prevTime) > delay) {
+    if (!delayable) {
+      update();
+    } else if (delay == 0 || (time - prevTime) > delay) {
       update();
       prevTime = time;
     }
@@ -153,16 +154,5 @@ public class Mode {
     for (int i = 0; i < nPanels; i++) {
       panels[i].fadeAllOut(factor);
     }
-  }
-
-  public void adjustDelay(int step) {
-    // by default, modes do not delay
-    if (delayable) {
-      delay = step;
-    }
-  }
-  
-  public int getDelay() {
-    return delay;
   }
 }

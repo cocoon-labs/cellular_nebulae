@@ -31,6 +31,7 @@ int modeC = 0;
 boolean houseLightsOn = false;
 float intraloopWSF = 1.0; // WSF = wheel step factor
 float interloopWSF = 1.0; // WSF = wheel step factor
+int delay = 0;
 
 Random rand = new Random();
 int bufferSize = 1024;
@@ -115,6 +116,16 @@ void oscSync()
   message.add(map(interloopWSF, 0.0, 5.0, 0.0, 1.0));
   oscP5.send(message, myNetAddressList);
   
+  message = new OscMessage("/xy0");
+  float[] vals = field.getAlgebraVals();
+  message.add(vals[1]);
+  message.add(vals[0]);
+  oscP5.send(message, myNetAddressList);
+  
+  message = new OscMessage("/xy1");
+  message.add(map(intraloopWSF, 0.0, 5.0, 0.0, 1.0));
+  message.add(map(interloopWSF, 0.0, 5.0, 0.0, 1.0));
+  oscP5.send(message, myNetAddressList);
 }
 
 void oscSyncMode() {
@@ -155,13 +166,12 @@ void oscEvent(OscMessage theOscMessage)
   } else if (addPatt.equals("/xy0")) {
     y = theOscMessage.get(0).floatValue();
     x = theOscMessage.get(1).floatValue();
-    println("x0 = " + x);
-    println("y0 = " + y);
+    field.updateAlgebra(x, y);
   } else if (addPatt.equals("/xy1")) {
     y = theOscMessage.get(0).floatValue();
     x = theOscMessage.get(1).floatValue();
-    println("x1 = " + x);
-    println("y1 = " + y);
+    intraloopWSF = map(y, 0.0, 1.0, 0.0, 5.0);
+    interloopWSF = map(x, 0.0, 1.0, 0.0, 5.0);
   } else if (patLen == 9 && addPatt.substring(0, 5).equals("/mode")) {
     if (theOscMessage.get(0).floatValue() == 1.0) {
       a0 = 3 - Integer.parseInt(addPatt.substring(6, 7));

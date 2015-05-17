@@ -8,6 +8,7 @@ public class Algebra extends Mode {
   int nOps = 5;
   int opChance = 50;
   int wheelStep = 10;
+  int nToAdd = 1;
   
   
   Algebra(Panel[] panels, ColorWheel wheel, float fadeFactor, int chance) {
@@ -26,7 +27,11 @@ public class Algebra extends Mode {
   }
   
   public void onBeat() {
-    if (addCounter == 0) updateByIndex(wheel.getColor(0, 255), rand.nextInt(nPixels));
+    if (addCounter == 0) {
+      for(int i = 0; i < nToAdd; i++) {
+        updateByIndex(wheel.getColor(0, 255), rand.nextInt(nPixels));
+      }
+    }
     
     wheel.turn((int) (wheelStep * interloopWSF));
     addCounter = (addCounter + 1) % addLength;

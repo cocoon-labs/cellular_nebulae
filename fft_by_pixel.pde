@@ -13,8 +13,9 @@ public class FFTByPixel extends Mode {
     super.update();
     for (int i = 0; i < nPixels; i++) {
       int iAmp = constrain(getPixelBand(i) * ampFactor, 0, 255);
+      float pixelStep = 256.0 / nPixels;
       if (iAmp < freqThresh) fadeOne(fadeFactor, i);
-      else updateByIndex(wheel.getColor(0, iAmp), i);
+      else updateByIndex(wheel.getColor((int) ((int) (pixelStep * intraloopWSF) * i), iAmp), i);
     }
   }
   
