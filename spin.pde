@@ -57,6 +57,6 @@ public class Spin extends Algebra {
       index = (index + nPixels - speed) % nPixels;
     }
     updateByIndex(wheel.getColor(0, brightness), index);
-    wheel.turn(pixelOffset);
+    wheel.turn((int) (pixelOffset * interloopWSF));
   }   
 }

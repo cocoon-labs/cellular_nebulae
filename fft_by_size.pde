@@ -21,20 +21,20 @@ public class FFTBySize extends Mode {
         panels[i].fadeMid(fadeFactor);
       else {
         midAmp = (int) map(midAmp, 0, 255, 0, globalBrightness);
-        updateMidOnPanel(i, sizeOffset, midAmp, pixelOffset);
+        updateMidOnPanel(i, (int) (sizeOffset * intraloopWSF), midAmp, (int) (pixelOffset * intraloopWSF));
       }
       
       if (highAmp < freqThresh)
         panels[i].fadeSmall(fadeFactor);
       else {
         highAmp = (int) map(highAmp, 0, 255, 0, globalBrightness);
-        updateSmallOnPanel(i, sizeOffset * 2, highAmp, pixelOffset);
+        updateSmallOnPanel(i, (int) (sizeOffset * intraloopWSF) * 2, highAmp, (int) (pixelOffset * intraloopWSF));
       }
     }
   }
   
   public void onBeat() {
     int panelOffset = bpm.getBand(2);
-    wheel.turn(panelOffset);
+    wheel.turn((int) (panelOffset * interloopWSF));
   }
 }

@@ -10,7 +10,7 @@ public class StarTrek extends Mode {
     turnOnPixels(rand.nextInt(10), 0, 1);
     super.update();
     refreshColors();
-    wheel.turn(1);
+    wheel.turn((int) (1 * interloopWSF));
   }
   
   public void onBeat() {

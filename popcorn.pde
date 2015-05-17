@@ -21,8 +21,8 @@ public class Popcorn extends Mode {
     for (int i = 0; i < nToLight; i++) {
       int iPixel = rand.nextInt(nPixels);
       int iPanel = iPixel / panels[0].nCircles;
-      updateByIndex(wheel.getColor(pixelOffset * i, brightness), iPixel);
+      updateByIndex(wheel.getColor((int) (pixelOffset * intraloopWSF) * i, brightness), iPixel);
     }
-    wheel.turn(beatOffset);
+    wheel.turn((int) (beatOffset * interloopWSF));
   }
 }

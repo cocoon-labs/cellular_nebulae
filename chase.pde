@@ -13,7 +13,7 @@ public class Chase extends Mode {
     delayable = true;
     for (int i = 0; i < nPanels; i++) {
       if (rand.nextInt(chance) == 0) {
-        panels[i].updateOne(wheel.getColor(i * pixelOffset, 200), rand.nextInt(9));
+        panels[i].updateOne(wheel.getColor(i * (int) (pixelOffset * intraloopWSF), 200), rand.nextInt(9));
       }
     }
     pulseBigs(1, 80);
@@ -23,7 +23,7 @@ public class Chase extends Mode {
     for (int i = 0; i < nPanels; i++) {
       if (rand.nextInt(3) < 2) {
         panels[i].updateOne(wheel.getColor(0, 255), rand.nextInt(9));
-        wheel.turn(beatOffset);
+        wheel.turn((int) (beatOffset * interloopWSF));
       }
     }
   }

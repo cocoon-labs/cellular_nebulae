@@ -44,7 +44,7 @@ public class Breathe extends Mode {
   }
   
   public void onBeat() {
-    if (!justEntered && !fadingIn) wheel.turn(3);
+    if (!justEntered && !fadingIn) wheel.turn((int) (3 * interloopWSF));
   }
   
   public void randomize() {

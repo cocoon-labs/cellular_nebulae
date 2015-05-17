@@ -29,6 +29,8 @@ int globalBrightness = 255;
 boolean modeSwitching = false;
 int modeC = 0;
 boolean houseLightsOn = false;
+float intraloopWSF = 1.0; // WSF = wheel step factor
+float interloopWSF = 1.0; // WSF = wheel step factor
 
 Random rand = new Random();
 int bufferSize = 1024;
@@ -105,13 +107,13 @@ void oscSync()
   message.add(map(field.getDelay(), 0.0, 255.0, 0.0, 1.0));
   oscP5.send(message, myNetAddressList);
   
-  /*message = new OscMessage("/faders/4");
-  message.add();
+  message = new OscMessage("/faders/4");
+  message.add(map(intraloopWSF, 0.0, 5.0, 0.0, 1.0));
   oscP5.send(message, myNetAddressList);
   
   message = new OscMessage("/faders/5");
-  message.add();
-  oscP5.send(message, myNetAddressList);*/
+  message.add(map(interloopWSF, 0.0, 5.0, 0.0, 1.0));
+  oscP5.send(message, myNetAddressList);
   
 }
 
@@ -172,18 +174,23 @@ void oscEvent(OscMessage theOscMessage)
     float faderVal = theOscMessage.get(0).floatValue();
     switch(faderNum) {
     case 1: // random speed
-        field.setModeChance(faderVal);
-        break;
+      field.setModeChance(faderVal);
+      break;
     case 2: // brightness
-        globalBrightness = (int) map(faderVal, 0.0, 1.0, 0.0, 255.0);
-        // int delay = (int) map(faderVal, 0.0, 1.0, 0.0, 500.0);
-        // println("Delay = " + delay + " ms");
-        break;
+      globalBrightness = (int) map(faderVal, 0.0, 1.0, 0.0, 255.0);
+      // int delay = (int) map(faderVal, 0.0, 1.0, 0.0, 500.0);
+      // println("Delay = " + delay + " ms");
+      break;
     case 3: // delay
       field.adjustDelay((int) map(faderVal, 0.0, 1.0, 0.0, 255.0));
+      break;
+    case 4: // intraloop wheel step factor
+      intraloopWSF = map(faderVal, 0.0, 1.0, 0.0, 5.0);
+      break;
+    case 5: // interloop wheel step factor
+      interloopWSF = map(faderVal, 0.0, 1.0, 0.0, 5.0);
+      break;
     default:
-      // TODO: Add logic for faders 4 and 5 
-      println("Fader " + faderNum + " = " + faderVal);
       break;
     }
   } else if (patLen == 14 && addPatt.substring(0,10).equals("/functions")) {

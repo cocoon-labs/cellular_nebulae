@@ -28,7 +28,7 @@ public class Algebra extends Mode {
   public void onBeat() {
     if (addCounter == 0) updateByIndex(wheel.getColor(0, 255), rand.nextInt(nPixels));
     
-    wheel.turn(wheelStep);
+    wheel.turn((int) (wheelStep * interloopWSF));
     addCounter = (addCounter + 1) % addLength;
   }
   

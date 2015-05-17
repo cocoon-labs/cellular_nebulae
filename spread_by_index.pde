@@ -28,7 +28,7 @@ public class SpreadByIndex extends Mode {
         needsReset = false;
       }
       if (needsReset) resetIndices();
-      wheel.turn(pixelOffset);
+      wheel.turn((int) (pixelOffset * interloopWSF));
     }
     updateCounter = (updateCounter + 1) % loopsPerUpdate;
   }

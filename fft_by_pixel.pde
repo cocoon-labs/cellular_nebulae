@@ -19,7 +19,7 @@ public class FFTByPixel extends Mode {
   }
   
   public void onBeat() {
-    wheel.turn(beatOffset);
+    wheel.turn((int) (beatOffset * interloopWSF));
     if (rand.nextInt(128) == 0) {
       ampFactor = 10 + rand.nextInt(20);
     }

@@ -24,7 +24,7 @@ public class FFTByPanel extends Mode {
   }
   
   public void onBeat() {
-    wheel.turn(beatOffset);
+    wheel.turn((int) (beatOffset * interloopWSF));
     if (rand.nextInt(64) == 0) {
       assignOneBand(rand.nextInt(nPanels));
     }

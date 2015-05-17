@@ -21,7 +21,7 @@ public class FFTByRandomPixel extends Mode {
   }
   
   public void onBeat() {
-    wheel.turn(beatOffset);
+    wheel.turn((int) (beatOffset * interloopWSF));
     if (rand.nextInt(4) == 0) {
       assignOneBand(rand.nextInt(nPixels));
     }

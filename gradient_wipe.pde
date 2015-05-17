@@ -28,7 +28,7 @@ public class GradientWipe extends Mode {
       for (int i = 0; i < nPixels; i++) {  
         panels[i / 9].targetColors[i % 9] = wheel.getColor((int) (pixelStep * i), 255);
       }
-      wheel.turn(loopOffset);
+      wheel.turn((int) (loopOffset * interloopWSF));
       refreshColors();
       if (fadeCounter < 73)
         fadeCounter++;
@@ -44,7 +44,7 @@ public class GradientWipe extends Mode {
       for (int i = 0; i < nPixels; i++) {  
         updateByIndex(wheel.getColor((int) (pixelStep * i), 255), i);
       }
-      wheel.turn(loopOffset);
+      wheel.turn((int) (loopOffset * interloopWSF));
       loopCounter = (loopCounter + 1) % 3927;
     }
 
