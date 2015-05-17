@@ -161,5 +161,8 @@ public class Mode {
       delay = step;
     }
   }
-
+  
+  public int getDelay() {
+    return delay;
+  }
 }

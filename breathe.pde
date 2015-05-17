@@ -9,6 +9,7 @@ public class Breathe extends Mode {
   Breathe(Panel[] panels, ColorWheel wheel, float fadeFactor, float fadeInFactor, int chance) {
     super(panels, wheel, fadeFactor, chance);
     this.fadeInFactor = fadeInFactor;
+    delayable = true;
     turnOnAll(0, 1);
   }
   

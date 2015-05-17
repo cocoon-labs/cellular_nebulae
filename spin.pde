@@ -10,6 +10,7 @@ public class Spin extends Algebra {
   
   Spin(Panel[] panels, ColorWheel wheel, float fadeFactor, int chance) {
     super(panels, wheel, fadeFactor, chance);
+    delayable = true;
     index = rand.nextInt(nPixels);
     speed = 1;
   }

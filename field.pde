@@ -22,6 +22,7 @@ public class Field {
   int nPanels, chance;
   OPC opc;
   int modeChance = 5000;
+  float faderModeChance = 0.02;
 
   Field(int yDim, int xDim, int chanceFactor, int displayHeight, int displayWidth, OPC opc) {
     int xOff = 0, yOff = 0;
@@ -70,6 +71,7 @@ public class Field {
   public void randomize() {
     if (rand.nextInt(modeChance) == 0 && modeSwitching) {
       setMode(rand.nextInt(nModes));
+      oscSyncMode();
     }
   }
     
@@ -135,8 +137,17 @@ public class Field {
   public void adjustDelay(int step) {
     modes[mode].adjustDelay(step);
   }
+  
+  public int getDelay() {
+    return modes[mode].getDelay();
+  }
 
   public void setModeChance(float factor) {
     modeChance = (int) (5100.0 - 5000.0 * factor);
+    faderModeChance = factor;
+  }
+  
+  public float getModeChanceForFader() {
+    return faderModeChance;
   }
 }

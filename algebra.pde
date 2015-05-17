@@ -12,6 +12,7 @@ public class Algebra extends Mode {
   
   Algebra(Panel[] panels, ColorWheel wheel, float fadeFactor, int chance) {
     super(panels, wheel, fadeFactor, chance);
+    delayable = true;
     randomize();
   }
   

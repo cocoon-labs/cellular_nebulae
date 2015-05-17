@@ -28,6 +28,7 @@ OPC opc;
 int globalBrightness = 255;
 boolean modeSwitching = false;
 int modeC = 0;
+boolean houseLightsOn = false;
 
 Random rand = new Random();
 int bufferSize = 1024;
@@ -38,6 +39,9 @@ String song = "otod.mp3";
 // Open sound control business
 OscP5 oscP5;
 NetAddress myRemoteLocation;
+NetAddressList myNetAddressList = new NetAddressList();
+int myListeningPort = 5001;
+int myBroadcastPort = 12000;
 
 void setup() {
   minim = new Minim(this);
@@ -60,11 +64,12 @@ void setup() {
 
   opc = new OPC(this, "127.0.0.1", 7890);
   field = new Field(3, 4, 500, displayHeight, displayWidth, opc);
-
-  oscP5 = new OscP5(this,5001);
+  
+  oscP5 = new OscP5(this, myListeningPort);
  
   // set the remote location to be the localhost on port 5001
-  myRemoteLocation = new NetAddress("192.168.1.253",5001);
+  myRemoteLocation = new NetAddress("192.168.1.149", myListeningPort);
+  
 }
 
 void draw() {
@@ -74,12 +79,74 @@ void draw() {
   // field.send();
 }
 
+void oscSync()
+{
+  OscMessage message;
+  
+  oscSyncMode();
+  
+  message = new OscMessage("/random");
+  message.add(modeSwitching ? 1.0 : 0.0);
+  oscP5.send(message, myNetAddressList);
+  
+  message = new OscMessage("/house");
+  message.add(houseLightsOn ? 1.0 : 0.0);
+  oscP5.send(message, myNetAddressList);
+  
+  message = new OscMessage("/faders/1");
+  message.add(field.getModeChanceForFader());
+  oscP5.send(message, myNetAddressList);
+  
+  message = new OscMessage("/faders/2");
+  message.add(map(globalBrightness, 0.0, 255.0, 0.0, 1.0));
+  oscP5.send(message, myNetAddressList);
+  
+  message = new OscMessage("/faders/3");
+  message.add(map(field.getDelay(), 0.0, 255.0, 0.0, 1.0));
+  oscP5.send(message, myNetAddressList);
+  
+  /*message = new OscMessage("/faders/4");
+  message.add();
+  oscP5.send(message, myNetAddressList);
+  
+  message = new OscMessage("/faders/5");
+  message.add();
+  oscP5.send(message, myNetAddressList);*/
+  
+}
+
+void oscSyncMode() {
+  OscMessage message;
+  
+  /*for (int y = 1; y < 4; y++) {
+    for (int x = 1; x < 5; x++) {
+      message = new OscMessage("/mode/" + str(y) + "/" + str(x));
+      message.add(0.0);
+      oscP5.send(message, myNetAddressList);
+    }
+  }*/
+      
+  message = new OscMessage("/mode/" + str(3 - field.mode / 4) + "/" + str(field.mode % 4 + 1));
+  message.add(1.0);
+  oscP5.send(message, myNetAddressList);
+}
+
 void oscEvent(OscMessage theOscMessage) 
 { 
+  oscConnect(theOscMessage.netAddress().address());
+  
   String addPatt = theOscMessage.addrPattern();
   int patLen = addPatt.length();
   float x, y;
   int a0, a1;
+  
+  /*if (addPatt.length() >= 3) {
+    OscMessage syncMessage = new OscMessage(addPatt);
+    for(int i = 0; i < theOscMessage.typetag().length(); i++) {
+      syncMessage.add(theOscMessage.get(i).floatValue());
+    }
+    oscP5.send(syncMessage, myNetAddressList);
+  }*/
   
   if (addPatt.length() < 3) {
     println("Page change");
@@ -98,6 +165,7 @@ void oscEvent(OscMessage theOscMessage)
       a0 = 3 - Integer.parseInt(addPatt.substring(6, 7));
       a1 = Integer.parseInt(addPatt.substring(8, 9)) - 1;
       field.setMode(4 * a0 + a1);
+      
     }
   } else if (patLen == 9 && addPatt.substring(0,7).equals("/faders")) {
     int faderNum = Integer.parseInt(addPatt.substring(8,9));
@@ -152,10 +220,11 @@ void oscEvent(OscMessage theOscMessage)
       globalBrightness = 255;
       modeSwitching = false;
       modeC = 0;
-
+      houseLightsOn = true;
     } else {
       field.setRainbow();
       field.newScheme();
+      houseLightsOn = false;
     }
   } else {
     print("Unexpected OSC Message Recieved: ");
@@ -163,6 +232,18 @@ void oscEvent(OscMessage theOscMessage)
     println("type tag: " + theOscMessage.typetag());
   }
   
+  oscSync();
+}
+
+private void oscConnect(String theIPaddress) {
+  if (!myNetAddressList.contains(theIPaddress, myBroadcastPort)) {
+    myNetAddressList.add(new NetAddress(theIPaddress, myBroadcastPort));
+    println("### adding " + theIPaddress + " to the list.");
+    //oscSync();
+  } else {
+    println("### " + theIPaddress + " is already connected.");
+  }
+  println("### currently there are "+myNetAddressList.list().size()+" remote locations connected.");
 }
 
 void serialize() {

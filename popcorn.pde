@@ -11,6 +11,7 @@ public class Popcorn extends Mode {
   public void update() {
     fadeAll(fadeFactor);
     super.update();
+    delayable = true;
     pulseBigs(1, 100);
   }
   

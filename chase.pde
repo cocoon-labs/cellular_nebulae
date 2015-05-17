@@ -10,6 +10,7 @@ public class Chase extends Mode {
   public void update() {
     fadeAll(fadeFactor);
     super.update();
+    delayable = true;
     for (int i = 0; i < nPanels; i++) {
       if (rand.nextInt(chance) == 0) {
         panels[i].updateOne(wheel.getColor(i * pixelOffset, 200), rand.nextInt(9));

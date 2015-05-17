@@ -8,6 +8,7 @@ public class GradientWipe extends Mode {
   
   GradientWipe(Panel[] panels, ColorWheel wheel, float fadeFactor, float fadeInFactor, int chance) {
     super(panels, wheel, fadeFactor, chance);
+    delayable = true;
     this.fadeInFactor = fadeInFactor;
   }
   

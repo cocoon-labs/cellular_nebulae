@@ -2,7 +2,7 @@ public class StarTrek extends Mode {
   
   StarTrek(Panel[] panels, ColorWheel wheel, float fadeFactor, int chance) {
     super(panels, wheel, fadeFactor, chance);
-    
+    delayable = true;
   }
   
   public void update() {
