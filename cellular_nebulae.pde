@@ -256,11 +256,11 @@ private void oscConnect(String theIPaddress) {
   if (!myNetAddressList.contains(theIPaddress, myBroadcastPort)) {
     myNetAddressList.add(new NetAddress(theIPaddress, myBroadcastPort));
     println("### adding " + theIPaddress + " to the list.");
-    //oscSync();
-  } else {
-    println("### " + theIPaddress + " is already connected.");
-  }
-  println("### currently there are "+myNetAddressList.list().size()+" remote locations connected.");
+    // //oscSync();
+  } // else {
+  //   //println("### " + theIPaddress + " is already connected.");
+  // }
+  // println("### currently there are "+myNetAddressList.list().size()+" remote locations connected.");
 }
 
 void serialize() {
