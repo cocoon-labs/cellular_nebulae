@@ -9,6 +9,7 @@ import netP5.*;
 
 boolean justPressed = false;
 Field field;
+float gainFactor = 1.0;
 
 // files and crap
 int fileIdx = 1;
@@ -113,7 +114,8 @@ void oscSync()
   oscP5.send(message, myNetAddressList);
   
   message = new OscMessage("/faders/5");
-  message.add(map(interloopWSF, 0.0, 5.0, 0.0, 1.0));
+  message.add(gainFactor);
+  //message.add(map(interloopWSF, 0.0, 5.0, 0.0, 1.0));
   oscP5.send(message, myNetAddressList);
   
   message = new OscMessage("/xy0");
@@ -198,7 +200,8 @@ void oscEvent(OscMessage theOscMessage)
       intraloopWSF = map(faderVal, 0.0, 1.0, 0.0, 5.0);
       break;
     case 5: // interloop wheel step factor
-      interloopWSF = map(faderVal, 0.0, 1.0, 0.0, 5.0);
+	gainFactor = faderVal;
+	//interloopWSF = map(faderVal, 0.0, 1.0, 0.0, 5.0); 
       break;
     default:
       break;
